@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
 }
 
 repositories {
@@ -8,14 +7,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.guava:guava:28.2-jre'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
-}
-
-application {
-    mainClassName = 'com.iconloop.score.example.App'
 }
 
 test {

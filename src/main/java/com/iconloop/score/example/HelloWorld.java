@@ -16,20 +16,25 @@
 
 package com.iconloop.score.example;
 
-import org.junit.jupiter.api.Test;
+import foundation.icon.ee.tooling.abi.External;
+import score.Context;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+public class HelloWorld {
+    private final String name;
 
-class AppTest {
-    @Test
-    void appHasAName() {
-        HelloWorld classUnderTest = new HelloWorld("Alice");
-        assertNotNull(classUnderTest.name(), "app should have a name");
+    public HelloWorld(String name) {
+        this.name = name;
     }
 
-    @Test
-    void appHasAGreeting() {
-        HelloWorld classUnderTest = new HelloWorld("Alice");
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    @External(readonly=true)
+    public String name() {
+        return name;
+    }
+
+    @External(readonly=true)
+    public String getGreeting() {
+        String msg = "Hello " + name + "!";
+        Context.println(msg);
+        return msg;
     }
 }
