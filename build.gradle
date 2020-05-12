@@ -6,6 +6,11 @@ repositories {
     jcenter()
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_10
+    targetCompatibility = JavaVersion.VERSION_1_10
+}
+
 // need to add this option to retrieve formal parameter names
 compileJava {
     options.compilerArgs += ['-parameters']
