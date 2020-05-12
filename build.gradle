@@ -6,6 +6,18 @@ repositories {
     jcenter()
 }
 
+// need to add this option to retrieve formal parameter names
+compileJava {
+    options.compilerArgs += ['-parameters']
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "com.iconloop.score.example.HelloWorld")
+    }
+    archivesBaseName = 'hello-world'
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
