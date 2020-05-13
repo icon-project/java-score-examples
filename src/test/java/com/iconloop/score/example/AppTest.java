@@ -18,13 +18,15 @@ package com.iconloop.score.example;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest {
     @Test
     void appHasAName() {
-        HelloWorld classUnderTest = new HelloWorld("Alice");
-        assertNotNull(classUnderTest.name(), "app should have a name");
+        final String name = "Alice";
+        HelloWorld classUnderTest = new HelloWorld(name);
+        assertEquals(classUnderTest.name(), name);
     }
 
     @Test
