@@ -79,7 +79,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\dappcomp.jar;%APP_HOME%\lib\tooling.jar;%APP_HOME%\lib\rt.jar;%APP_HOME%\lib\slf4j-simple-1.7.26.jar;%APP_HOME%\lib\slf4j-api-1.7.26.jar;%APP_HOME%\lib\msgpack-core-0.8.17.jar;%APP_HOME%\lib\asm-commons-6.2.1.jar;%APP_HOME%\lib\asm-util-6.2.1.jar;%APP_HOME%\lib\asm-analysis-6.2.1.jar;%APP_HOME%\lib\asm-tree-6.2.1.jar;%APP_HOME%\lib\asm-6.2.1.jar;%APP_HOME%\lib\bcprov-jdk15on-1.60.jar
+set CLASSPATH=%APP_HOME%\lib\dappcomp.jar;%APP_HOME%\lib\tooling.jar;%APP_HOME%\lib\rt.jar;%APP_HOME%\lib\slf4j-simple-1.7.26.jar;%APP_HOME%\lib\slf4j-api-1.7.26.jar;%APP_HOME%\lib\msgpack-core-0.8.17.jar;%APP_HOME%\lib\asm-commons-7.0.jar;%APP_HOME%\lib\asm-util-7.0.jar;%APP_HOME%\lib\asm-analysis-7.0.jar;%APP_HOME%\lib\asm-tree-7.0.jar;%APP_HOME%\lib\asm-7.0.jar;%APP_HOME%\lib\bcprov-jdk15on-1.60.jar
 
 @rem Execute dappcomp
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DAPPCOMP_OPTS%  -classpath "%CLASSPATH%" DAppCompiler %CMD_LINE_ARGS%

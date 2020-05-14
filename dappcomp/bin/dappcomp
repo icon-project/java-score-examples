@@ -80,7 +80,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH=$APP_HOME/lib/dappcomp.jar:$APP_HOME/lib/tooling.jar:$APP_HOME/lib/rt.jar:$APP_HOME/lib/slf4j-simple-1.7.26.jar:$APP_HOME/lib/slf4j-api-1.7.26.jar:$APP_HOME/lib/msgpack-core-0.8.17.jar:$APP_HOME/lib/asm-commons-6.2.1.jar:$APP_HOME/lib/asm-util-6.2.1.jar:$APP_HOME/lib/asm-analysis-6.2.1.jar:$APP_HOME/lib/asm-tree-6.2.1.jar:$APP_HOME/lib/asm-6.2.1.jar:$APP_HOME/lib/bcprov-jdk15on-1.60.jar
+CLASSPATH=$APP_HOME/lib/dappcomp.jar:$APP_HOME/lib/tooling.jar:$APP_HOME/lib/rt.jar:$APP_HOME/lib/slf4j-simple-1.7.26.jar:$APP_HOME/lib/slf4j-api-1.7.26.jar:$APP_HOME/lib/msgpack-core-0.8.17.jar:$APP_HOME/lib/asm-commons-7.0.jar:$APP_HOME/lib/asm-util-7.0.jar:$APP_HOME/lib/asm-analysis-7.0.jar:$APP_HOME/lib/asm-tree-7.0.jar:$APP_HOME/lib/asm-7.0.jar:$APP_HOME/lib/bcprov-jdk15on-1.60.jar
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
