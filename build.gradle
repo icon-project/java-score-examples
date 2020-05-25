@@ -1,9 +1,19 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'foundation.icon:gradle-javaee-plugin:0.1.0'
+    }
+}
+
 subprojects {
     repositories {
         jcenter()
     }
 
     apply plugin: 'java'
+    apply plugin: 'foundation.icon.javaee-sdk'
 
     java {
         sourceCompatibility = JavaVersion.VERSION_11
