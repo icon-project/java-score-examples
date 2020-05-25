@@ -4,7 +4,7 @@ This repository contains SCORE (Smart Contract for ICON) examples written in Jav
 
 ## Requirements
 
-You need to install JDK 11 or later version. Visit [http://openjdk.java.net/] for prebuilt binaries.
+You need to install JDK 11 or later version. Visit [OpenJDK.net](http://openjdk.java.net/) for prebuilt binaries.
 Or you can install a proper OpenJDK package from your OS vendors.
 
 In macOS:
@@ -25,7 +25,7 @@ $ sudo apt install openjdk-11-jdk
 ```
 $ ./gradlew build
 ```
-The compiled jar bundle will be generated at `./build/libs/hello-world.jar`.
+The compiled jar bundle will be generated at `./hello-world/build/libs/hello-world.jar`.
 
 ### 2. Optimize the jar with DAppCompiler
 
@@ -33,9 +33,9 @@ You need to optimize your jar before you deploy it to local or ICON networks.
 This involves some pre-processing to ensure the actual deployment successful.
 
 ```
-$ ./dappcomp/bin/dappcomp ./build/libs/hello-world.jar
+$ ./dappcomp/bin/dappcomp ./hello-world/build/libs/hello-world.jar
 [main] INFO DAppCompiler - === DAppCompiler ===
-[main] INFO DAppCompiler - Generated build/libs/optimized.jar
+[main] INFO DAppCompiler - Generated ./hello-world/build/libs/optimized.jar
 ```
 
 ### 3. Deploy the optimized jar
@@ -45,7 +45,7 @@ Assuming you are running a local network that is listening on port 9082 for inco
 you can create a deploy transaction with the optimized jar and deploy it to the local network as follows.
 
 ```
-$ goloop rpc sendtx deploy ./build/libs/optimized.jar \
+$ goloop rpc sendtx deploy ./hello-world/build/libs/optimized.jar \
     --uri http://localhost:9082/api/v3 \
     --key_store <your_wallet_json> --key_password <password> \
     --nid 3 --step_limit=1000000 \
