@@ -1,9 +1,10 @@
 buildscript {
     repositories {
+        mavenCentral()
         mavenLocal()
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.2.0'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.3.0'
     }
 }
 
