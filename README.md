@@ -20,23 +20,25 @@ $ sudo apt install openjdk-11-jdk
 
 ## How to Run
 
-### 1. Compile the source
+### 1. Build the project
 
 ```
 $ ./gradlew build
 ```
 The compiled jar bundle will be generated at `./hello-world/build/libs/hello-world.jar`.
 
-### 2. Optimize the jar with DAppCompiler
+### 2. Optimize the jar
 
-You need to optimize your jar before you deploy it to local or ICON networks.
+You need to optimize your jar bundle before you deploy it to local or ICON networks.
 This involves some pre-processing to ensure the actual deployment successful.
 
+`gradle-javaee-plugin` is a Gradle plugin to automate the process of generating the optimized jar bundle.
+Run the `optimizedJar` task to generate the optimized jar bundle.
+
 ```
-$ ./dappcomp/bin/dappcomp ./hello-world/build/libs/hello-world.jar
-[main] INFO DAppCompiler - === DAppCompiler ===
-[main] INFO DAppCompiler - Generated ./hello-world/build/libs/optimized.jar
+$ ./gradlew optimizedJar
 ```
+The output jar will be located at `./hello-world/build/libs/hello-world-optimized.jar`.
 
 ### 3. Deploy the optimized jar
 
@@ -45,7 +47,7 @@ Assuming you are running a local network that is listening on port 9082 for inco
 you can create a deploy transaction with the optimized jar and deploy it to the local network as follows.
 
 ```
-$ goloop rpc sendtx deploy ./hello-world/build/libs/optimized.jar \
+$ goloop rpc sendtx deploy ./hello-world/build/libs/hello-world-optimized.jar \
     --uri http://localhost:9082/api/v3 \
     --key_store <your_wallet_json> --key_password <password> \
     --nid 3 --step_limit=1000000 \
