@@ -1,18 +1,21 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
         }
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.3.0'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.4.0'
     }
 }
 
 subprojects {
     repositories {
         jcenter()
+        maven {
+            url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
+        }
     }
 
     apply plugin: 'java'
