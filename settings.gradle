@@ -1,2 +1,4 @@
 rootProject.name = 'java-score-examples'
-include 'hello-world'
+include (
+    'hello-world',
+    'sample-token')
