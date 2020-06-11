@@ -1,4 +1,5 @@
 rootProject.name = 'java-score-examples'
 include (
     'hello-world',
+    'sample-crowdsale',
     'sample-token')
