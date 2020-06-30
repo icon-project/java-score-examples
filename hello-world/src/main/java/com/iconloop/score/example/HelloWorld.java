@@ -16,8 +16,8 @@
 
 package com.iconloop.score.example;
 
-import foundation.icon.ee.tooling.abi.External;
 import score.Context;
+import score.annotation.External;
 
 public class HelloWorld {
     private final String name;
