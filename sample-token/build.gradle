@@ -4,3 +4,7 @@ optimizedJar {
     mainClassName = 'com.iconloop.score.example.SampleToken'
     archivesBaseName = 'sample-token'
 }
+
+dependencies {
+    testImplementation project(':testsvc')
+}
