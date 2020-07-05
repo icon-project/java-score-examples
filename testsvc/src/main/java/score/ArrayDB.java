@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package com.iconloop.testsvc;
+package score;
 
-import java.math.BigInteger;
-
-public class TestBase {
-    protected static final BigInteger ICX = BigInteger.TEN.pow(18);
-
-    private static ServiceManager sInstance;
-
-    protected static ServiceManager getServiceManager() {
-        if (sInstance == null) {
-            sInstance = new ServiceManager();
-        }
-        return sInstance;
-    }
+public interface ArrayDB<E> {
+    void add(E value);
+    void set(int index, E value);
+    void removeLast();
+    E get(int index);
+    int size();
+    E pop();
 }

@@ -19,6 +19,7 @@ package com.iconloop.testsvc;
 import score.Address;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 
 public class Score extends TestBase {
     private static final ServiceManager sm = getServiceManager();
@@ -30,6 +31,10 @@ public class Score extends TestBase {
     public Score(Account score, Account owner) {
         this.score = score;
         this.owner = owner;
+    }
+
+    public Account getAccount() {
+        return this.score;
     }
 
     public Address getAddress() {
@@ -44,29 +49,36 @@ public class Score extends TestBase {
         this.instance = newInstance;
     }
 
+    public Object getInstance() {
+        return this.instance;
+    }
+
     public Object call(String method, Object... params) {
-        return call(true, method, params);
+        return call(null, true, BigInteger.ZERO, method, params);
     }
 
-    public void invoke(String method, Object... params) {
-        call(false, method, params);
+    public void invoke(Account from, String method, Object... params) {
+        sm.getBlock().increase();
+        call(from, false, BigInteger.ZERO, method, params);
     }
 
-    private Object call(boolean readonly, String method, Object... params) {
-        sm.pushContext(method, readonly);
-        Class<?> clazz = instance.getClass();
+    Object call(Account from, boolean readonly, BigInteger value, String method, Object... params) {
+        sm.pushFrame(from, this.score, readonly, method, value);
         Class<?>[] paramClasses = new Class<?>[params.length];
         for (int i = 0; i < params.length; i++) {
             paramClasses[i] = params[i].getClass();
         }
         try {
+            Class<?> clazz = instance.getClass();
             var m = clazz.getMethod(method, paramClasses);
             return m.invoke(instance, params);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
+        } catch (InvocationTargetException e) {
+            throw new AssertionError();
         } finally {
-            sm.popContext();
+            sm.popFrame();
         }
     }
 }

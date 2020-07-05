@@ -20,87 +20,195 @@ import score.Address;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Stack;
 
 public class ServiceManager {
-    private final Map<Class<?>, Score> scoreMap = new HashMap<>();
+    private static final BigInteger ICX = BigInteger.TEN.pow(18);
+
+    private final Stack<Frame> contexts = new Stack<>();
+    private final Map<Class<?>, Score> classScoreMap = new HashMap<>();
+    private final Map<Address, Score> addressScoreMap = new HashMap<>();
     private int nextCount = 1;
 
     public Score deploy(Account owner, Class<?> mainClass, Object... params) throws Exception {
+        getBlock().increase();
         var score = new Score(Account.newScoreAccount(nextCount++), owner);
-        scoreMap.put(mainClass, score);
-        pushContext("<init>", false);
+        classScoreMap.put(mainClass, score);
+        addressScoreMap.put(score.getAddress(), score);
+        pushFrame(owner, score.getAccount(), false, "<init>", BigInteger.ZERO);
         try {
-            Constructor<?> ctor = getConstructor(mainClass, params);
+            Class<?>[] paramClasses = new Class<?>[params.length];
+            for (int i = 0; i < params.length; i++) {
+                paramClasses[i] = params[i].getClass();
+            }
+            Constructor<?> ctor = mainClass.getConstructor(paramClasses);
             score.setInstance(ctor.newInstance(params));
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             e.printStackTrace();
             throw e;
         } finally {
-            popContext();
+            popFrame();
         }
         return score;
     }
 
     public Account createAccount() {
-        return Account.newExternalAccount(nextCount++);
+        return createAccount(0);
     }
 
-    public Address getOwner(Class<?> key) {
-        var score = scoreMap.get(key);
+    public Account createAccount(int initialIcx) {
+        var acct = Account.newExternalAccount(nextCount++);
+        acct.addBalance("ICX", ICX.multiply(BigInteger.valueOf(initialIcx)));
+        return acct;
+    }
+
+    public Address getOwner() {
+        var address = getCurrentFrame().to.getAddress();
+        return getScoreFromAddress(address).getOwner().getAddress();
+    }
+
+    public Address getOrigin() {
+        return getFirstFrame().from.getAddress();
+    }
+
+    public Address getCaller() {
+        return getCurrentFrame().from.getAddress();
+    }
+
+    public Address getAddress() {
+        return getCurrentFrame().to.getAddress();
+    }
+
+    private Score getScoreFromClass(Class<?> caller) {
+        var score = classScoreMap.get(caller);
         if (score == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(caller.getName() + " not found");
         }
-        return score.getOwner().getAddress();
+        return score;
     }
 
-    public Address getOrigin(Class<?> key) {
-        return getOwner(key);
-    }
-
-    public Address getCaller(Class<?> key) {
-        return getOwner(key);
-    }
-
-    public Address getAddress(Class<?> key) {
-        var score = scoreMap.get(key);
+    private Score getScoreFromAddress(Address target) {
+        var score = addressScoreMap.get(target);
         if (score == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("ScoreNotFound");
         }
-        return score.getAddress();
+        return score;
     }
 
-    private Constructor<?> getConstructor(Class<?> mainClass, Object[] params) throws NoSuchMethodException {
-        Class<?>[] paramClasses = new Class<?>[params.length];
-        for (int i = 0; i < params.length; i++) {
-            paramClasses[i] = params[i].getClass();
-        }
-        return mainClass.getConstructor(paramClasses);
+    public Object call(Account from, BigInteger value, Address targetAddress, String method, Object... params) {
+        Score score = getScoreFromAddress(targetAddress);
+        return score.call(from, false, value, method, params);
     }
 
-    private final Stack<Frame> context = new Stack<>();
+    public Object call(Class<?> caller, BigInteger value, Address targetAddress, String method, Object... params) {
+        Score from = getScoreFromClass(caller);
+        if ("fallback".equals(method)) {
+            transfer(from.getAccount(), targetAddress, value);
+            return null;
+        } else {
+            return call(from.getAccount(), value, targetAddress, method, params);
+        }
+    }
 
-    static class Frame {
+    public void transfer(Account from, Address targetAddress, BigInteger value) {
+        getBlock().increase();
+        var fromBalance = from.getBalance();
+        if (fromBalance.compareTo(value) < 0) {
+            throw new IllegalStateException("OutOfBalance");
+        }
+        var to = Account.getAccount(targetAddress);
+        if (to == null) {
+            throw new IllegalStateException("NoAccount");
+        }
+        from.subtractBalance("ICX", value);
+        to.addBalance("ICX", value);
+        if (targetAddress.isContract()) {
+            call(from, value, targetAddress, "fallback");
+        }
+    }
+
+    public static class Block {
+        private static Block sInstance;
+
+        private long height;
+        private long timestamp;
+
+        public Block(long height, long timestamp) {
+            this.height = height;
+            this.timestamp = timestamp;
+        }
+
+        public static Block getInstance() {
+            if (sInstance == null) {
+                Random rand = new Random();
+                sInstance = new Block(rand.nextInt(1000), System.nanoTime() * 1000);
+            }
+            return sInstance;
+        }
+
+        public long getHeight() {
+            return height;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public void increase() {
+            increase(1);
+        }
+
+        public void increase(long delta) {
+            height += delta;
+            timestamp = System.nanoTime() * 1000;
+        }
+    }
+
+    public Block getBlock() {
+        return Block.getInstance();
+    }
+
+    public static class Frame {
+        Account from;
+        Account to;
         String method;
         boolean readonly;
+        BigInteger value;
 
-        public Frame(String method, boolean readonly) {
-            this.method = method;
+        public Frame(Account from, Account to, boolean readonly, String method, BigInteger value) {
+            this.from = from;
+            this.to = to;
             this.readonly = readonly;
+            this.method = method;
+            this.value = value;
+        }
+
+        public boolean isReadonly() {
+            return readonly;
+        }
+
+        public BigInteger getValue() {
+            return value;
         }
     }
 
-    protected void pushContext(String method, boolean readonly) {
-        context.push(new Frame(method, readonly));
+    protected void pushFrame(Account from, Account to, boolean readonly, String method, BigInteger value) {
+        contexts.push(new Frame(from, to, readonly, method, value));
     }
 
-    protected void popContext() {
-        context.pop();
+    protected void popFrame() {
+        contexts.pop();
     }
 
-    public boolean getCurrentContext() {
-        return context.peek().readonly;
+    public Frame getCurrentFrame() {
+        return contexts.peek();
+    }
+
+    public Frame getFirstFrame() {
+        return contexts.firstElement();
     }
 }

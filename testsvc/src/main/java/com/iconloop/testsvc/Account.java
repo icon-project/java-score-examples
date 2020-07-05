@@ -23,15 +23,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Account {
+    private static final Map<Address, Account> accounts = new HashMap<>();
+
     private final Address address;
     private final Map<String, BigInteger> balances = new HashMap<>();
 
     public static Account newExternalAccount(int seed) {
-        return new Account(0, seed);
+        var acct = new Account(0, seed);
+        accounts.put(acct.getAddress(), acct);
+        return acct;
     }
 
     public static Account newScoreAccount(int seed) {
-        return new Account(1, seed);
+        var acct = new Account(1, seed);
+        accounts.put(acct.getAddress(), acct);
+        return acct;
+    }
+
+    public static Account getAccount(Address address) {
+        return accounts.get(address);
     }
 
     private Account(int type, int seed) {
@@ -59,6 +69,10 @@ public class Account {
 
     public BigInteger getBalance(String symbol) {
         return balances.getOrDefault(symbol, BigInteger.ZERO);
+    }
+
+    public BigInteger getBalance() {
+        return getBalance("ICX");
     }
 
     @Override

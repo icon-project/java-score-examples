@@ -77,7 +77,7 @@ class SampleTokenTest extends TestBase {
     void transfer() {
         Account alice = sm.createAccount();
         BigInteger value = TEN.pow(decimals);
-        tokenScore.invoke("transfer", alice.getAddress(), value, "to alice".getBytes());
+        tokenScore.invoke(owner, "transfer", alice.getAddress(), value, "to alice".getBytes());
         owner.subtractBalance(symbol, value);
         assertEquals(owner.getBalance(symbol),
                 tokenScore.call("balanceOf", tokenScore.getOwner().getAddress()));

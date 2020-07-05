@@ -176,14 +176,14 @@ public class SampleCrowdsale
     }
 
     @EventLog
-    private void CrowdsaleStarted(BigInteger fundingGoal, long deadline) {}
+    protected void CrowdsaleStarted(BigInteger fundingGoal, long deadline) {}
 
     @EventLog
-    private void CrowdsaleEnded() {}
+    protected void CrowdsaleEnded() {}
 
     @EventLog(indexed=3)
-    private void FundTransfer(Address backer, BigInteger amount, boolean isContribution) {}
+    protected void FundTransfer(Address backer, BigInteger amount, boolean isContribution) {}
 
     @EventLog(indexed=2)
-    private void GoalReached(Address recipient, BigInteger totalAmountRaised) {}
+    protected void GoalReached(Address recipient, BigInteger totalAmountRaised) {}
 }
