@@ -25,7 +25,7 @@ $ sudo apt install openjdk-11-jdk
 ```
 $ ./gradlew build
 ```
-The compiled jar bundle will be generated at `./hello-world/build/libs/hello-world.jar`.
+The compiled jar bundle will be generated at `./hello-world/build/libs/hello-world-0.1.0.jar`.
 
 ### 2. Optimize the jar
 
@@ -38,7 +38,7 @@ Run the `optimizedJar` task to generate the optimized jar bundle.
 ```
 $ ./gradlew optimizedJar
 ```
-The output jar will be located at `./hello-world/build/libs/hello-world-optimized.jar`.
+The output jar will be located at `./hello-world/build/libs/hello-world-0.1.0-optimized.jar`.
 
 ### 3. Deploy the optimized jar
 
@@ -47,7 +47,7 @@ Assuming you are running a local network that is listening on port 9082 for inco
 you can create a deploy transaction with the optimized jar and deploy it to the local network as follows.
 
 ```
-$ goloop rpc sendtx deploy ./hello-world/build/libs/hello-world-optimized.jar \
+$ goloop rpc sendtx deploy ./hello-world/build/libs/hello-world-0.1.0-optimized.jar \
     --uri http://localhost:9082/api/v3 \
     --key_store <your_wallet_json> --key_password <password> \
     --nid 3 --step_limit=1000000 \
@@ -71,7 +71,7 @@ $ goloop rpc txresult <tx_hash> --uri http://localhost:9082/api/v3
 
 Then you can invoke `getGreeting` method via the following `call` command.
 ```
-$ goloop rpc call --to <score_address> --method getGreeting
+$ goloop rpc call --to <score_address> --method getGreeting --uri http://localhost:9082/api/v3
 "Hello Alice!"
 ```
 
