@@ -57,16 +57,18 @@ class SampleCrowdsaleTest extends TestBase {
 
     @BeforeEach
     public void setup() throws Exception {
+        // deploy token and crowdsale scores
         tokenScore = sm.deploy(owner, SampleToken.class,
                 name, symbol, BigInteger.valueOf(decimals), initialSupply);
         crowdsaleScore = sm.deploy(owner, SampleCrowdsale.class,
                 fundingGoalInICX, tokenScore.getAddress(), durationInBlocks);
+
+        // setup spy object against the crowdsale object
+        crowdsaleSpy = (SampleCrowdsale) spy(crowdsaleScore.getInstance());
+        crowdsaleScore.setInstance(crowdsaleSpy);
     }
 
     private void startCrowdsale() {
-        // setup spy object
-        crowdsaleSpy = (SampleCrowdsale) spy(crowdsaleScore.getInstance());
-        crowdsaleScore.setInstance(crowdsaleSpy);
         // transfer all tokens to crowdsale score
         tokenScore.invoke(owner, "transfer", crowdsaleScore.getAddress(), totalSupply, startCrowdsaleBytes);
     }
@@ -130,5 +132,27 @@ class SampleCrowdsaleTest extends TestBase {
         verify(crowdsaleSpy).GoalReached(owner.getAddress(), ICX.multiply(fundingGoalInICX));
         verify(crowdsaleSpy).FundTransfer(owner.getAddress(), ICX.multiply(fundingGoalInICX), false);
         assertEquals(ICX.multiply(fundingGoalInICX), Account.getAccount(owner.getAddress()).getBalance());
+    }
+
+    @Test
+    void safeWithdrawal_refund() {
+        startCrowdsale();
+        // fund 40 icx from Alice
+        Account alice = sm.createAccount(100);
+        sm.transfer(alice, crowdsaleScore.getAddress(), ICX.multiply(BigInteger.valueOf(40)));
+        // fund 50 icx from Bob
+        Account bob = sm.createAccount(100);
+        sm.transfer(bob, crowdsaleScore.getAddress(), ICX.multiply(BigInteger.valueOf(50)));
+        // make the goal reached
+        sm.getBlock().increase(durationInBlocks.longValue());
+        crowdsaleScore.invoke(owner, "checkGoalReached");
+        verify(crowdsaleSpy, never()).GoalReached(owner.getAddress(), ICX.multiply(fundingGoalInICX));
+
+        // invoke safeWithdrawal from alice to refund
+        crowdsaleScore.invoke(alice, "safeWithdrawal");
+        verify(crowdsaleSpy).FundTransfer(alice.getAddress(), ICX.multiply(BigInteger.valueOf(40)), false);
+        // invoke safeWithdrawal from bob to refund
+        crowdsaleScore.invoke(bob, "safeWithdrawal");
+        verify(crowdsaleSpy).FundTransfer(bob.getAddress(), ICX.multiply(BigInteger.valueOf(50)), false);
     }
 }
