@@ -100,6 +100,7 @@ class SampleCrowdsaleTest extends TestBase {
         sm.transfer(alice, crowdsaleScore.getAddress(), fund);
         // verify
         verify(crowdsaleSpy).fallback();
+        verify(crowdsaleSpy).FundTransfer(alice.getAddress(), fund, true);
         assertEquals(fund, Account.getAccount(crowdsaleScore.getAddress()).getBalance());
     }
 
