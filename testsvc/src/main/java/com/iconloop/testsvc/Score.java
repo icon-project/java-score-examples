@@ -66,7 +66,8 @@ public class Score extends TestBase {
         sm.pushFrame(from, this.score, readonly, method, value);
         Class<?>[] paramClasses = new Class<?>[params.length];
         for (int i = 0; i < params.length; i++) {
-            paramClasses[i] = params[i].getClass();
+            Class<?> type = params[i].getClass();
+            paramClasses[i] = (type == Boolean.class) ? Boolean.TYPE : type;
         }
         try {
             Class<?> clazz = instance.getClass();
@@ -76,7 +77,8 @@ public class Score extends TestBase {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         } catch (InvocationTargetException e) {
-            throw new AssertionError();
+            e.printStackTrace();
+            throw new AssertionError(e.getTargetException().getMessage());
         } finally {
             sm.popFrame();
         }

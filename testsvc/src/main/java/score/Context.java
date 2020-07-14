@@ -98,15 +98,19 @@ public class Context extends TestBase {
     }
 
     public static void revert(int code, String message) {
+        throw new AssertionError(String.format("Reverted(%d): %s", code, message));
     }
 
     public static void revert(int code) {
+        throw new AssertionError(String.format("Reverted(%d)", code));
     }
 
     public static void revert(String message) {
+        revert(0, message);
     }
 
     public static void revert() {
+        revert(0);
     }
 
     public static void require(boolean condition) {
@@ -131,8 +135,11 @@ public class Context extends TestBase {
         return null;
     }
 
+    public static void logEvent(Object[] indexed, Object[] data) {
+    }
+
     public static<K, V> BranchDB<K, V> newBranchDB(String id, Class<?> leafValueClass) {
-        return null;
+        return new StubDictDB<>(id, leafValueClass);
     }
 
     public static<K, V> DictDB<K, V> newDictDB(String id, Class<V> valueClass) {
@@ -147,13 +154,15 @@ public class Context extends TestBase {
         return new StubVarDB<>(id, valueClass);
     }
 
-    public static void logEvent(Object[] indexed, Object[] data) {
-    }
-
-    private static class StubDictDB<K, V> implements DictDB<K, V> {
+    private static class StubDictDB<K, V> implements DictDB<K, V>, BranchDB<K, V> {
         private final Map<K, V> map = new HashMap<>();
+        private final Map<String, Object> subMap = new HashMap<>();
+        private final String id;
+        private final Class<?> leafClass;
 
-        public StubDictDB(String id, Class<V> valueClass) {
+        public StubDictDB(String id, Class<?> valueClass) {
+            this.id = id;
+            this.leafClass = valueClass;
         }
 
         @Override
@@ -172,6 +181,37 @@ public class Context extends TestBase {
         @Override
         public V getOrDefault(K k, V v) {
             return map.getOrDefault(k, v);
+        }
+
+        @Override
+        public Object at(K key) {
+            String subId = getSubId(key);
+            Object o = subMap.get(subId);
+            if (o == null) {
+                o = new StubDictDB<>(subId, leafClass);
+                subMap.put(subId, o);
+            }
+            return o;
+        }
+
+        private String getSubId(K key) {
+            return id + encode(key);
+        }
+
+        private String encode(Object v) {
+            if (v instanceof String) {
+                return (String) v;
+            } else if (v instanceof Address) {
+                return v.toString();
+            } else if (v instanceof BigInteger) {
+                return ((BigInteger) v).toString(16);
+            } else if (v instanceof Integer) {
+                return BigInteger.valueOf((Integer) v).toString(16);
+            } else if (v instanceof Long) {
+                return BigInteger.valueOf((Long) v).toString(16);
+            } else {
+                throw new IllegalArgumentException("Unsupported key type: " + v.getClass());
+            }
         }
     }
 

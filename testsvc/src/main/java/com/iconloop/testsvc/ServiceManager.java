@@ -106,7 +106,7 @@ public class ServiceManager {
 
     public Object call(Class<?> caller, BigInteger value, Address targetAddress, String method, Object... params) {
         Score from = getScoreFromClass(caller);
-        if ("fallback".equals(method)) {
+        if ("fallback".equals(method) || "".equals(method)) {
             transfer(from.getAccount(), targetAddress, value);
             return null;
         } else {
