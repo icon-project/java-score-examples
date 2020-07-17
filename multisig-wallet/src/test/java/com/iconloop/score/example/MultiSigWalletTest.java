@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -341,5 +342,30 @@ class MultiSigWalletTest extends TestBase {
                 .map((tx) -> tx.get("_transactionId"))
                 .collect(Collectors.joining(","));
         assertEquals("0x0,0x3,0x4", received);
+    }
+
+    @Test
+    void getConvertedParams_wrongFormat() {
+        String[] wrongFormats = {
+                "{\"name\": \"_walletOwner\", \"type\": \"Address\", \"value\": \"%s\"}",
+                "[{\"name\": \"_walletOwner\", \"type\": \"Address\", \"value\": \"%s\"}",
+                "[{\"name\": \"_walletOwner\", \"type\": \"String\", \"value\": \"%s\"}]",
+                "[{\"name\": \"_walletOwner\", \"type_\": \"Address\", \"value\": \"%s\"}]",
+                "[{\"name\": \"_walletOwner\", \"type\": \"%s\"}]",
+                "[{\"name\": \"_walletOwner\", \"value\": \"%s\"}]",
+                "[{\"type\": \"_walletOwner\", \"type\": \"Address\", \"value\": \"%s\"}]",
+        };
+        BigInteger txId = BigInteger.ZERO;
+        for (String format : wrongFormats) {
+            String params = String.format(format, sm.createAccount().getAddress());
+            System.out.println(">>> params=" + params);
+            multisigScore.invoke(owners[0], "submitTransaction",
+                    multisigScore.getAddress(), "addWalletOwner", params, BigInteger.ZERO, "");
+            confirmByOwner(owners[1], txId);
+
+            verify(multisigSpy).ExecutionFailure(txId);
+            reset(multisigSpy);
+            txId = txId.add(BigInteger.ONE);
+        }
     }
 }

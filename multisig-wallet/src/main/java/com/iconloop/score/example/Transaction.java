@@ -16,6 +16,10 @@
 
 package com.iconloop.score.example;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import score.Address;
 import score.ObjectReader;
 import score.ObjectWriter;
@@ -100,49 +104,25 @@ public class Transaction {
         if (params == null || params.equals("")) {
             return null;
         }
-        String entries = params.substring(1, params.length() - 1); // strip '[' and ']'
-        StringTokenizer entryToken = new StringTokenizer(entries, "{}");
-        if (!entryToken.hasMoreTokens()) {
-            return new Object[0];
+        JsonValue json = Json.parse(params);
+        if (!json.isArray()) {
+            throw new IllegalArgumentException("Not json array");
         }
-        Object[] ret = new Object[1];
-        for (int i = 0; true; i++) {
-            String entry = entryToken.nextToken();
-            while (",".equals(entry) || " ".equals(entry)) {
-                entry = entryToken.nextToken();
+        JsonArray array = json.asArray();
+        Object[] ret = new Object[array.size()];
+        int i = 0;
+        for (JsonValue item : array) {
+            JsonObject member = item.asObject();
+            if (member.size() != 3) {
+                throw new IllegalArgumentException("Invalid member size");
             }
-            StringTokenizer st = new StringTokenizer(entry, "\":, \t\n");
-            String type = null;
-            String value = null;
-            while (st.hasMoreTokens()) {
-                String k = st.nextToken();
-                String v = st.nextToken();
-                switch (k) {
-                    case "type":
-                        type = v;
-                        break;
-                    case "value":
-                        value = v;
-                        break;
-                    case "name":
-                        // simply ignore
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-            }
-            if (type != null && value != null) {
-                ret[i] = convertParam(type, value);
+            String name = member.getString("name", null);
+            String type = member.getString("type", null);
+            String value = member.getString("value", null);
+            if (name != null && type != null && value != null) {
+                ret[i++] = convertParam(type, value);
             } else {
-                throw new IllegalArgumentException();
-            }
-            if (entryToken.hasMoreTokens()) {
-                // increase the object array
-                Object[] dst = new Object[ret.length + 1];
-                System.arraycopy(ret, 0, dst, 0, ret.length);
-                ret = dst;
-            } else {
-                break;
+                throw new IllegalArgumentException("Incomplete params");
             }
         }
         return ret;
@@ -178,7 +158,7 @@ public class Transaction {
                     return bytes;
                 }
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Unknown type");
     }
 
     @Override

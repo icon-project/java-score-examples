@@ -392,6 +392,7 @@ public class MultiSigWallet
                     transaction.method(), transaction.getConvertedParams());
             return true;
         } catch (Exception e) {
+            Context.println("[Exception] " + e.getMessage());
             return false;
         }
     }
