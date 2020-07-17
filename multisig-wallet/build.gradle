@@ -1,9 +1,5 @@
 version = '0.1.0'
 
-optimizedJar {
-    mainClassName = 'com.iconloop.score.example.MultiSigWallet'
-}
-
 dependencies {
     compileOnly 'foundation.icon:javaee-api:0.8.2'
     implementation 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
@@ -12,6 +8,13 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+optimizedJar {
+    mainClassName = 'com.iconloop.score.example.MultiSigWallet'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 test {
