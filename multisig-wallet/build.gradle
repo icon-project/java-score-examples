@@ -2,7 +2,8 @@ version = '0.9.1'
 
 dependencies {
     compileOnly 'foundation.icon:javaee-api:0.8.3'
-    implementation 'com.github.sink772:minimal-json:0.9.5'
+    implementation 'com.github.sink772:javaee-scorex:0.5.0'
+    implementation 'com.github.sink772:minimal-json:0.9.6'
 
     testImplementation project(':testsvc')
     testImplementation 'org.mockito:mockito-core:3.3.3'
