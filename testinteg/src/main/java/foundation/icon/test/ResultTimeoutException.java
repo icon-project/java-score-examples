@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 ICONLOOP Inc.
+ * Copyright 2019 ICON Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,27 @@
  * limitations under the License.
  */
 
-package com.iconloop.score.example;
+package foundation.icon.test;
 
-import score.Context;
-import score.annotation.External;
-import score.annotation.Payable;
+import foundation.icon.icx.data.Bytes;
 
-public class HelloWorld {
-    private final String name;
+public class ResultTimeoutException extends Exception {
+    Bytes txHash;
 
-    public HelloWorld(String name) {
-        this.name = name;
+    public ResultTimeoutException() {
+        super();
     }
 
-    @External(readonly=true)
-    public String name() {
-        return name;
+    public ResultTimeoutException(String message) {
+        super(message);
     }
 
-    @External(readonly=true)
-    public String getGreeting() {
-        String msg = "Hello " + name + "!";
-        Context.println(msg);
-        return msg;
+    public ResultTimeoutException(Bytes txHash) {
+        super("Timeout. txHash=" + txHash);
+        this.txHash = txHash;
     }
 
-    @Payable
-    public void fallback() {
-        // just receive incoming funds
+    public Bytes getTxHash() {
+        return this.txHash;
     }
 }

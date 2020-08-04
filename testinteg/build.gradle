@@ -1,0 +1,7 @@
+apply plugin: 'java-library'
+
+optimizedJar.enabled = false
+
+dependencies {
+    implementation 'foundation.icon:icon-sdk:0.9.15'
+}

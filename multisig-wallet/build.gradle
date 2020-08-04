@@ -1,5 +1,14 @@
 version = '0.9.1'
 
+// for integration tests
+sourceSets {
+    intTest {}
+}
+configurations {
+    intTestImplementation.extendsFrom testImplementation
+    intTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
 dependencies {
     compileOnly 'foundation.icon:javaee-api:0.8.3'
     implementation 'com.github.sink772:javaee-scorex:0.5.0'
@@ -9,6 +18,10 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+
+    intTestImplementation project(':testinteg')
+    intTestImplementation 'foundation.icon:icon-sdk:0.9.15'
+    intTestRuntimeOnly project(':hello-world')
 }
 
 optimizedJar {
@@ -21,3 +34,21 @@ optimizedJar {
 test {
     useJUnitPlatform()
 }
+
+def helloWorldJar = project(':hello-world').getTasks().getByName('optimizedJar')
+
+task integrationTest(type: Test, dependsOn: optimizedJar) {
+    useJUnitPlatform()
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    testLogging.showStandardStreams = true
+
+    def prefix = 'score.path.'
+    systemProperty(prefix + project.name, optimizedJar.outputJarName)
+    systemProperty(prefix + 'hello-world', helloWorldJar.outputJarName)
+}
+
+integrationTest.dependsOn(helloWorldJar)
