@@ -127,6 +127,10 @@ public class Context extends TestBase {
         return null;
     }
 
+    public static byte[] sha256(byte[] data) throws IllegalArgumentException {
+        return null;
+    }
+
     public static byte[] recoverKey(byte[] msgHash, byte[] signature, boolean compressed) {
         return null;
     }
