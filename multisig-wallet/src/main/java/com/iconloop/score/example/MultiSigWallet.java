@@ -26,6 +26,7 @@ import score.annotation.EventLog;
 import score.annotation.External;
 import score.annotation.Optional;
 import score.annotation.Payable;
+import scorex.util.StringTokenizer;
 
 import java.math.BigInteger;
 import java.util.List;
