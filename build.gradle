@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.6.4'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.7.0'
     }
 }
 
@@ -19,7 +19,7 @@ subprojects {
     }
 
     apply plugin: 'java'
-    apply plugin: 'foundation.icon.javaee-sdk'
+    apply plugin: 'foundation.icon.javaee'
 
     java {
         sourceCompatibility = JavaVersion.VERSION_11
