@@ -43,6 +43,9 @@ task integrationTest(type: Test, dependsOn: optimizedJar) {
     classpath = sourceSets.intTest.runtimeClasspath
     testLogging.showStandardStreams = true
 
+    // use the common config files
+    systemProperty('env.props', new File(project(':testinteg').projectDir, 'conf/env.props'))
+
     def prefix = 'score.path.'
     systemProperty(prefix + project.name, optimizedJar.outputJarName)
     systemProperty(prefix + 'sample-token', sampleTokenJar.outputJarName)

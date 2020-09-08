@@ -23,7 +23,7 @@ import foundation.icon.icx.crypto.KeystoreException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class Env {
@@ -42,16 +42,16 @@ public class Env {
             System.err.printf("'%s' does not exist\n", envFile);
             throw new IllegalArgumentException(e.getMessage());
         }
-        readProperties(props);
+        String confPath = Path.of(envFile).getParent().toString() + "/";
+        readProperties(props, confPath);
     }
 
-    private static void readProperties(Properties props) {
+    private static void readProperties(Properties props, String confPath) {
         String chainName = "chain";
         String nid = props.getProperty(chainName + ".nid");
         if (nid == null) {
             throw new IllegalArgumentException("nid not found");
         }
-        String confPath = Paths.get("conf").toAbsolutePath().toString() + "/";
         String godWalletPath = confPath + props.getProperty(chainName + ".godWallet");
         String godPassword = props.getProperty(chainName + ".godPassword");
         KeyWallet godWallet;
