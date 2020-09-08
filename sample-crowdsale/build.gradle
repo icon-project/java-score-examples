@@ -1,20 +1,51 @@
 version = '0.1.0'
 
+// for integration tests
+sourceSets {
+    intTest {}
+}
+configurations {
+    intTestImplementation.extendsFrom testImplementation
+    intTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+dependencies {
+    compileOnly 'foundation.icon:javaee-api:0.8.4'
+
+    testImplementation project(':sample-token')
+    testImplementation project(':testsvc')
+    testImplementation 'org.mockito:mockito-core:3.3.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+
+    intTestImplementation project(':testinteg')
+    intTestImplementation 'foundation.icon:icon-sdk:0.9.15'
+}
+
 optimizedJar {
     mainClassName = 'com.iconloop.score.example.SampleCrowdsale'
     archivesBaseName = 'sample-crowdsale'
 }
 
-dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.8.4'
-    testImplementation project(':sample-token')
-    testImplementation project(':testsvc')
-
-    testImplementation 'org.mockito:mockito-core:3.3.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
-}
-
 test {
     useJUnitPlatform()
 }
+
+project(':sample-token').setProperty('version', version)
+def sampleTokenJar = project(':sample-token').getTasks().getByName('optimizedJar')
+
+task integrationTest(type: Test, dependsOn: optimizedJar) {
+    useJUnitPlatform()
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    testLogging.showStandardStreams = true
+
+    def prefix = 'score.path.'
+    systemProperty(prefix + project.name, optimizedJar.outputJarName)
+    systemProperty(prefix + 'sample-token', sampleTokenJar.outputJarName)
+}
+
+integrationTest.dependsOn(sampleTokenJar)
