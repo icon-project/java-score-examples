@@ -20,7 +20,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 
     intTestImplementation project(':testinteg')
-    intTestImplementation 'foundation.icon:icon-sdk:0.9.15'
+    intTestImplementation 'foundation.icon:icon-sdk:2.0.0-SNAPSHOT'
     intTestRuntimeOnly project(':hello-world')
 }
 

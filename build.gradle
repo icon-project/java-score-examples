@@ -16,6 +16,9 @@ subprojects {
         maven {
             url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
         }
+        maven {
+            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
 
     apply plugin: 'java'
