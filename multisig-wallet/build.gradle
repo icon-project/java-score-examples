@@ -10,7 +10,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.8.4'
+    compileOnly 'foundation.icon:javaee-api:0.8.5'
     implementation 'com.github.sink772:javaee-scorex:0.5.1'
     implementation 'com.github.sink772:minimal-json:0.9.6'
 

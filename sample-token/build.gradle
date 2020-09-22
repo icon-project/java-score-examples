@@ -6,7 +6,7 @@ optimizedJar {
 }
 
 dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.8.4'
+    compileOnly 'foundation.icon:javaee-api:0.8.5'
     testImplementation project(':testsvc')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'

@@ -3,5 +3,5 @@ apply plugin: 'java-library'
 optimizedJar.enabled = false
 
 dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.8.4'
+    compileOnly 'foundation.icon:javaee-api:0.8.5'
 }
