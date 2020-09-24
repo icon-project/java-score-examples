@@ -113,10 +113,10 @@ if (_to.isContract()) {
 
 ## References
 
-* [SCORE API document](http://ci.arch.iconloop.com/pages/arch/goloop/master/javadoc/)
-* [Goloop document](http://ci.arch.iconloop.com/pages/arch/goloop/master/doc/)
-* [Goloop CLI command reference](http://ci.arch.iconloop.com/pages/arch/goloop/master/doc/goloop_cli.html)
+* [SCORE API document](https://www.javadoc.io/doc/foundation.icon/javaee-api)
+* [Gradle plugin for JavaEE](https://github.com/icon-project/gradle-javaee-plugin)
+* [Goloop CLI command reference](https://github.com/icon-project/goloop/blob/master/doc/goloop_cli.md)
 
-## Licenses
+## License
 
-This project follows the Apache 2.0 License. Please refer to [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for details.
+This project is available under the [Apache License, Version 2.0](LICENSE).
