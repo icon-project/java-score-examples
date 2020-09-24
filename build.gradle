@@ -1,9 +1,6 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
-        }
     }
     dependencies {
         classpath 'foundation.icon:gradle-javaee-plugin:0.7.1'
@@ -13,9 +10,6 @@ buildscript {
 subprojects {
     repositories {
         jcenter()
-        maven {
-            url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
-        }
         maven {
             url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
