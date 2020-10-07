@@ -52,7 +52,7 @@ public class TransactionHandler {
 
     public Score deploy(Wallet owner, String scorePath, RpcObject params)
             throws IOException, ResultTimeoutException, TransactionFailureException {
-        return deploy(owner, scorePath, params, Constants.DEFAULT_INSTALL_STEPS);
+        return deploy(owner, scorePath, params, null);
     }
 
     public Score deploy(Wallet owner, String scorePath, RpcObject params, BigInteger steps)
@@ -71,17 +71,19 @@ public class TransactionHandler {
         }
     }
 
-    private Bytes doDeploy(Wallet owner, byte[] content, Address to, RpcObject params, BigInteger steps, String contentType)
-            throws IOException {
+    private Bytes doDeploy(Wallet owner, byte[] content, Address to, RpcObject params,
+                           BigInteger steps, String contentType) throws IOException {
         Transaction transaction = TransactionBuilder.newBuilder()
                 .nid(getNetworkId())
                 .from(owner.getAddress())
                 .to(to)
-                .stepLimit(steps)
                 .deploy(contentType, content)
                 .params(params)
                 .build();
-        SignedTransaction signedTransaction = new SignedTransaction(transaction, owner);
+        if (steps == null) {
+            steps = estimateStep(transaction);
+        }
+        SignedTransaction signedTransaction = new SignedTransaction(transaction, owner, steps);
         return iconService.sendTransaction(signedTransaction).execute();
     }
 
@@ -110,12 +112,19 @@ public class TransactionHandler {
         return iconService.getScoreApi(scoreAddress).execute();
     }
 
+    public BigInteger estimateStep(Transaction transaction) throws IOException {
+        return iconService.estimateStep(transaction).execute();
+    }
+
     public RpcItem call(Call<RpcItem> call) throws IOException {
         return this.iconService.call(call).execute();
     }
 
-    public Bytes invoke(Wallet wallet, Transaction tx) throws IOException {
-        return this.iconService.sendTransaction(new SignedTransaction(tx, wallet)).execute();
+    public Bytes invoke(Wallet wallet, Transaction tx, BigInteger steps) throws IOException {
+        if (steps == null) {
+            steps = estimateStep(tx);
+        }
+        return this.iconService.sendTransaction(new SignedTransaction(tx, wallet, steps)).execute();
     }
 
     public TransactionResult getResult(Bytes txHash)

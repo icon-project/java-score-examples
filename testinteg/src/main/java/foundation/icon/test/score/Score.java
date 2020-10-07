@@ -83,7 +83,7 @@ public class Score {
     }
 
     public Bytes invoke(Wallet wallet, String method, RpcObject params) throws IOException {
-        return invoke(wallet, method, params, BigInteger.ZERO, Constants.DEFAULT_STEPS);
+        return invoke(wallet, method, params, BigInteger.ZERO, null);
     }
 
     public Bytes invoke(Wallet wallet, String method, RpcObject params,
@@ -91,23 +91,18 @@ public class Score {
         return invoke(wallet, method, params, value, steps, null, null);
     }
 
-    public Bytes invoke(Wallet wallet, Transaction tx) throws IOException {
-        return this.txHandler.invoke(wallet, tx);
-    }
-
     public Bytes invoke(Wallet wallet, String method, RpcObject params, BigInteger value,
                         BigInteger steps, BigInteger timestamp, BigInteger nonce) throws IOException {
-        Transaction tx = getTransaction(wallet, method, params, value, steps, timestamp, nonce);
-        return this.txHandler.invoke(wallet, tx);
+        Transaction tx = getTransaction(wallet, method, params, value, timestamp, nonce);
+        return this.txHandler.invoke(wallet, tx, steps);
     }
 
     private Transaction getTransaction(Wallet wallet, String method, RpcObject params, BigInteger value,
-                                       BigInteger steps, BigInteger timestamp, BigInteger nonce) {
+                                       BigInteger timestamp, BigInteger nonce) {
         TransactionBuilder.Builder builder = TransactionBuilder.newBuilder()
                 .nid(getNetworkId())
                 .from(wallet.getAddress())
-                .to(getAddress())
-                .stepLimit(steps);
+                .to(getAddress());
 
         if ((value != null) && value.bitLength() != 0) {
             builder.value(value);
@@ -130,7 +125,7 @@ public class Score {
 
     public TransactionResult invokeAndWaitResult(Wallet wallet, String method, RpcObject params)
             throws ResultTimeoutException, IOException {
-        return invokeAndWaitResult(wallet, method, params, null, Constants.DEFAULT_STEPS);
+        return invokeAndWaitResult(wallet, method, params, null, null);
     }
 
     public TransactionResult invokeAndWaitResult(Wallet wallet, String method, RpcObject params,

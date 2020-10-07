@@ -38,9 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MultiSigWalletScore extends Score {
-    private static final BigInteger STEPS = BigInteger.valueOf(300000);
-    private static final BigInteger STEPS_2 = BigInteger.valueOf(500000);
-    private static final BigInteger STEPS_3 = BigInteger.valueOf(700000);
 
     public MultiSigWalletScore(Score other) {
         super(other);
@@ -70,7 +67,7 @@ public class MultiSigWalletScore extends Score {
                 .put("_value", new RpcValue(value))
                 .put("_description", new RpcValue(description))
                 .build();
-        return invokeAndWaitResult(fromWallet, "submitTransaction", params, STEPS);
+        return invokeAndWaitResult(fromWallet, "submitTransaction", params);
     }
 
     public TransactionResult confirmTransaction(Wallet fromWallet, BigInteger txId)
@@ -78,7 +75,7 @@ public class MultiSigWalletScore extends Score {
         RpcObject params = new RpcObject.Builder()
                 .put("_transactionId", new RpcValue(txId))
                 .build();
-        TransactionResult result = invokeAndWaitResult(fromWallet, "confirmTransaction", params, STEPS_2);
+        TransactionResult result = invokeAndWaitResult(fromWallet, "confirmTransaction", params);
         ensureConfirmation(result, fromWallet.getAddress(), txId);
         return result;
     }
@@ -100,7 +97,7 @@ public class MultiSigWalletScore extends Score {
                 .put("_params", new RpcValue(methodParams))
                 .put("_description", new RpcValue(description))
                 .build();
-        return invokeAndWaitResult(fromWallet, "submitTransaction", params, STEPS_2);
+        return invokeAndWaitResult(fromWallet, "submitTransaction", params);
     }
 
     public TransactionResult removeWalletOwner(Wallet fromWallet, Address owner, String description)
@@ -112,7 +109,7 @@ public class MultiSigWalletScore extends Score {
                 .put("_params", new RpcValue(methodParams))
                 .put("_description", new RpcValue(description))
                 .build();
-        return invokeAndWaitResult(fromWallet, "submitTransaction", params, STEPS_2);
+        return invokeAndWaitResult(fromWallet, "submitTransaction", params);
     }
 
     public TransactionResult replaceWalletOwner(Wallet fromWallet, Address oldOwner, Address newOwner, String description)
@@ -126,7 +123,7 @@ public class MultiSigWalletScore extends Score {
                 .put("_params", new RpcValue(methodParams))
                 .put("_description", new RpcValue(description))
                 .build();
-        return invokeAndWaitResult(fromWallet, "submitTransaction", params, STEPS_3);
+        return invokeAndWaitResult(fromWallet, "submitTransaction", params);
     }
 
     public TransactionResult changeRequirement(Wallet fromWallet, int required, String description)
@@ -138,7 +135,7 @@ public class MultiSigWalletScore extends Score {
                 .put("_params", new RpcValue(methodParams))
                 .put("_description", new RpcValue(description))
                 .build();
-        return invokeAndWaitResult(fromWallet, "submitTransaction", params, STEPS_2);
+        return invokeAndWaitResult(fromWallet, "submitTransaction", params);
     }
 
     public BigInteger getTransactionId(TransactionResult result) throws IOException {
