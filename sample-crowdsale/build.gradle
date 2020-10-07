@@ -27,6 +27,22 @@ optimizedJar {
     archivesBaseName = 'sample-crowdsale'
 }
 
+deployJar {
+    endpoints {
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 3
+        }
+    }
+    keystore = rootProject.hasProperty('keystoreName') ? "$keystoreName" : ''
+    password = rootProject.hasProperty('keystorePass') ? "$keystorePass" : ''
+    parameters {
+        arg('_fundingGoalInIcx', '0x64')
+        arg('_tokenScore', 'cx451cee702db0e48aacbe446d53cbd8aa00142354')
+        arg('_durationInBlocks', '0x20')
+    }
+}
+
 test {
     useJUnitPlatform()
 }

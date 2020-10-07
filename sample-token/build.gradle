@@ -1,16 +1,33 @@
 version = '0.1.0'
 
-optimizedJar {
-    mainClassName = 'com.iconloop.score.example.SampleToken'
-    archivesBaseName = 'sample-token'
-}
-
 dependencies {
     compileOnly 'foundation.icon:javaee-api:0.8.5'
     testImplementation project(':testsvc')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+optimizedJar {
+    mainClassName = 'com.iconloop.score.example.SampleToken'
+    archivesBaseName = 'sample-token'
+}
+
+deployJar {
+    endpoints {
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 3
+        }
+    }
+    keystore = rootProject.hasProperty('keystoreName') ? "$keystoreName" : ''
+    password = rootProject.hasProperty('keystorePass') ? "$keystorePass" : ''
+    parameters {
+        arg('_name', 'MySampleToken')
+        arg('_symbol', 'MST')
+        arg('_decimals', '0x12')
+        arg('_initialSupply', '0x3e8')
+    }
 }
 
 test {

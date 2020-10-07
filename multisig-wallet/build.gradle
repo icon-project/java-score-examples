@@ -1,4 +1,4 @@
-version = '0.9.1'
+version = '0.9.2'
 
 // for integration tests
 sourceSets {
@@ -28,6 +28,21 @@ optimizedJar {
     mainClassName = 'com.iconloop.score.example.MultiSigWallet'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+deployJar {
+    endpoints {
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 3
+        }
+    }
+    keystore = rootProject.hasProperty('keystoreName') ? "$keystoreName" : ''
+    password = rootProject.hasProperty('keystorePass') ? "$keystorePass" : ''
+    parameters {
+        arg('_walletOwners', 'hxe5679f118e093657b71967b0dfddb4d00cbd80b4,hx65f5d819d4b3897c39790f1f8b8a2bdcaeb605d0')
+        arg('_required', '0x2')
     }
 }
 

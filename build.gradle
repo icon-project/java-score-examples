@@ -1,9 +1,12 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.7.1'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.7.2'
     }
 }
 

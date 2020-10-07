@@ -1,15 +1,29 @@
 version = '0.1.0'
 
-optimizedJar {
-    mainClassName = 'com.iconloop.score.example.HelloWorld'
-    archivesBaseName = 'hello-world'
-}
-
 dependencies {
     implementation 'foundation.icon:javaee-api:0.8.5'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+optimizedJar {
+    mainClassName = 'com.iconloop.score.example.HelloWorld'
+    archivesBaseName = 'hello-world'
+}
+
+deployJar {
+    endpoints {
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 3
+        }
+    }
+    keystore = rootProject.hasProperty('keystoreName') ? "$keystoreName" : ''
+    password = rootProject.hasProperty('keystorePass') ? "$keystorePass" : ''
+    parameters {
+        arg('name', 'Alice')
+    }
 }
 
 test {
