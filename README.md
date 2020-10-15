@@ -92,6 +92,19 @@ Succeeded to deploy: 0x699534c9f5277539e1b572420819141c7cf3e52a6904a34b2a2cdb05b
 SCORE address: cxd6d044b01db068cded47bde12ed4f15a6da9f1d8
 ```
 
+**[Note]** If you want to deploy to Gangnam testnet, use the following configuration for the endpoint and run `deployToGangnam` task.
+```groovy
+deployJar {
+    endpoints {
+        gangnam {
+            uri = 'https://gicon.net.solidwallet.io/api/v3'
+            nid = 7
+        }
+        ...
+    }
+}
+```
+
 ### 4. Verify the execution
 
 Check the deployed SCORE address first using the `txresult` command.

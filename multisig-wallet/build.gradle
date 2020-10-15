@@ -33,6 +33,10 @@ optimizedJar {
 
 deployJar {
     endpoints {
+        gangnam {
+            uri = 'https://gicon.net.solidwallet.io/api/v3'
+            nid = 7
+        }
         local {
             uri = 'http://localhost:9082/api/v3'
             nid = 3
