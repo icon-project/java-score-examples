@@ -139,7 +139,9 @@ public class TransactionHandler {
             try {
                 return iconService.getTransactionResult(txHash).execute();
             } catch (RpcError e) {
-                if (e.getCode() == -31002 || e.getCode() == -31003) { // pending or executing
+                if (e.getCode() == -31002 /* pending */
+                        || e.getCode() == -31003 /* executing */
+                        || e.getCode() == -31004 /* not found */) {
                     if (limitTime < System.currentTimeMillis()) {
                         throw new ResultTimeoutException(txHash);
                     }
