@@ -27,6 +27,7 @@ import foundation.icon.test.TestBase;
 import foundation.icon.test.TransactionHandler;
 import foundation.icon.test.score.HelloWorld;
 import foundation.icon.test.score.MultiSigWalletScore;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -57,6 +58,13 @@ public class MultiSigWalletTest extends TestBase {
         }
         for (KeyWallet wallet : wallets) {
             ensureIcxBalance(txHandler, wallet.getAddress(), BigInteger.ZERO, amount);
+        }
+    }
+
+    @AfterAll
+    static void shutdown() throws Exception {
+        for (KeyWallet wallet : wallets) {
+            txHandler.refundAll(wallet);
         }
     }
 

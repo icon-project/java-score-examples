@@ -27,6 +27,7 @@ import foundation.icon.test.TestBase;
 import foundation.icon.test.TransactionHandler;
 import foundation.icon.test.score.CrowdSaleScore;
 import foundation.icon.test.score.SampleTokenScore;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -57,6 +58,13 @@ class CrowdsaleTest extends TestBase {
             ensureIcxBalance(txHandler, wallet.getAddress(), BigInteger.ZERO, amount);
         }
         ownerWallet = wallets[0];
+    }
+
+    @AfterAll
+    static void shutdown() throws Exception {
+        for (KeyWallet wallet : wallets) {
+            txHandler.refundAll(wallet);
+        }
     }
 
     @Test
