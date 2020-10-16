@@ -55,6 +55,11 @@ public class SampleCrowdsale
         this.amountRaised = Context.newVarDB("amountRaised", BigInteger.class);
     }
 
+    @External(readonly=true)
+    public String name() {
+        return "SampleCrowdsale";
+    }
+
     /*
      * Receives initial tokens to reward to the contributors.
      */

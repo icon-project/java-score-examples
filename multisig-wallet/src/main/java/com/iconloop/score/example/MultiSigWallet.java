@@ -56,6 +56,11 @@ public class MultiSigWallet
         this.required.set(_required);
     }
 
+    @External(readonly=true)
+    public String name() {
+        return "MultiSigWallet";
+    }
+
     @Payable
     public void fallback() {
         BigInteger value = Context.getValue();
