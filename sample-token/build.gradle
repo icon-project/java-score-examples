@@ -1,7 +1,7 @@
 version = '0.1.0'
 
 dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.8.5'
+    compileOnly 'foundation.icon:javaee-api:0.8.6'
     testImplementation project(':testsvc')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
