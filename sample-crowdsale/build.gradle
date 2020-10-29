@@ -51,7 +51,7 @@ test {
     useJUnitPlatform()
 }
 
-project(':sample-token').setProperty('version', version)
+project(':sample-token').setProperty('version', '0.2.0')
 def sampleTokenJar = project(':sample-token').getTasks().getByName('optimizedJar')
 
 task integrationTest(type: Test, dependsOn: optimizedJar) {

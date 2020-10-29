@@ -83,5 +83,9 @@ class SampleTokenTest extends TestBase {
                 tokenScore.call("balanceOf", tokenScore.getOwner().getAddress()));
         assertEquals(value,
                 tokenScore.call("balanceOf", alice.getAddress()));
+
+        // transfer self
+        tokenScore.invoke(alice, "transfer", alice.getAddress(), value, "self transfer".getBytes());
+        assertEquals(value, tokenScore.call("balanceOf", alice.getAddress()));
     }
 }
