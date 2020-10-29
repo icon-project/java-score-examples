@@ -1,5 +1,9 @@
 # Multisignature Wallet SCORE for Java
 
+This subproject contains the Java implementation of Multisignature Wallet SCORE.
+Please visit the [original repository](https://github.com/icon-project/multisig-wallet) written in Python
+if you want to know how to interact with the SCORE.
+
 ## Comparison with Python version
 
 | Method | Python | Java | Notes |

@@ -123,6 +123,36 @@ $ goloop rpc call --to <score_address> --method getGreeting --uri http://localho
 "Hello Alice!"
 ```
 
+## Testing
+
+Two testing frameworks are provided as to be used for different purposes:
+one is for unit testing and the other is for integration testing.
+
+### Unit testing
+
+`testsvc` subproject can be used for the unit testing,
+and it provides a SCORE execution emulation layer can be integrated with the JUnit 5 and Mockito frameworks.
+
+Here are the sample unit test cases.
+  - [HelloWorld](hello-world/src/test/java/com/iconloop/score/example/AppTest.java)
+  - [MultisigWallet](multisig-wallet/src/test/java/com/iconloop/score/example/MultiSigWalletTest.java)
+  - [Crowdsale](sample-crowdsale/src/test/java/com/iconloop/score/example/SampleCrowdsaleTest.java)
+  - [SampleToken](sample-token/src/test/java/com/iconloop/score/example/SampleTokenTest.java)
+
+### Integration testing
+
+`testinteg` subproject can be used for the integration testing.
+It assumes there is a running ICON network (either local or remote) that can be connected for the testing.
+It uses the ICON Java SDK (`foundation.icon:icon-sdk:2.0.0-SNAPSHOT`) to interact with the network.
+The [default configuration](testinteg/conf/env.props) is for localhost network.
+If you want to change this configuration, either modify the configuration file directly
+or set the proper system property (`env.props`) when you run the integration testing
+(see [example](https://github.com/icon-project/java-score-examples/blob/14c4df50b146c12c27a040410411271e87efa94a/multisig-wallet/build.gradle#L69)).
+
+Here are the sample integration test cases.
+  - [MultisigWallet](multisig-wallet/src/intTest/java/foundation/icon/test/cases/MultiSigWalletTest.java)
+  - [Crowdsale](sample-crowdsale/src/intTest/java/foundation/icon/test/cases/CrowdsaleTest.java)
+
 ## Java SCORE Structure
 
 ### Comparison to Python SCORE
