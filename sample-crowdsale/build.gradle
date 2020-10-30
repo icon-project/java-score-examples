@@ -20,6 +20,7 @@ dependencies {
 
     intTestImplementation project(':testinteg')
     intTestImplementation 'foundation.icon:icon-sdk:2.0.0-SNAPSHOT'
+    intTestRuntimeOnly project(':irc2-token')
 }
 
 optimizedJar {
@@ -51,8 +52,7 @@ test {
     useJUnitPlatform()
 }
 
-project(':sample-token').setProperty('version', '0.2.0')
-def sampleTokenJar = project(':sample-token').getTasks().getByName('optimizedJar')
+def sampleTokenJar = project(':irc2-token').getTasks().getByName('optimizedJar')
 
 task integrationTest(type: Test, dependsOn: optimizedJar) {
     useJUnitPlatform()
