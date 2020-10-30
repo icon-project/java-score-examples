@@ -1,0 +1,42 @@
+version = '0.9.0'
+
+dependencies {
+    compileOnly 'foundation.icon:javaee-api:0.8.6'
+    implementation 'com.github.sink772:javaee-tokens:0.5.1'
+
+    testImplementation project(':testsvc')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+optimizedJar {
+    mainClassName = 'com.iconloop.score.example.IRC2BasicToken'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+deployJar {
+    endpoints {
+        gangnam {
+            uri = 'https://gicon.net.solidwallet.io/api/v3'
+            nid = 7
+        }
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 3
+        }
+    }
+    keystore = rootProject.hasProperty('keystoreName') ? "$keystoreName" : ''
+    password = rootProject.hasProperty('keystorePass') ? "$keystorePass" : ''
+    parameters {
+        arg('_name', 'MyIRC2Token')
+        arg('_symbol', 'MIT')
+        arg('_decimals', '0x12')
+        arg('_initialSupply', '0x3e8')
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
