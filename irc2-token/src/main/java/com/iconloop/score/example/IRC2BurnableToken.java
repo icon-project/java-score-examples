@@ -16,13 +16,13 @@
 
 package com.iconloop.score.example;
 
-import com.iconloop.score.token.irc2.IRC2Basic;
+import com.iconloop.score.token.irc2.IRC2Burnable;
 import score.Context;
 
 import java.math.BigInteger;
 
-public class IRC2BasicToken extends IRC2Basic {
-    public IRC2BasicToken(String _name, String _symbol, int _decimals, BigInteger _initialSupply) {
+public class IRC2BurnableToken extends IRC2Burnable {
+    public IRC2BurnableToken(String _name, String _symbol, int _decimals, BigInteger _initialSupply) {
         super(_name, _symbol, _decimals);
 
         // mint the initial token supply here
