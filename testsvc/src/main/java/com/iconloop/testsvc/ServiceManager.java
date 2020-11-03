@@ -41,13 +41,13 @@ public class ServiceManager {
         addressScoreMap.put(score.getAddress(), score);
         pushFrame(owner, score.getAccount(), false, "<init>", BigInteger.ZERO);
         try {
-            Class<?>[] paramClasses = new Class<?>[params.length];
-            for (int i = 0; i < params.length; i++) {
-                paramClasses[i] = params[i].getClass();
+            Constructor<?>[] ctor = mainClass.getConstructors();
+            if (ctor.length != 1) {
+                // User SCORE should only have one public constructor
+                throw new AssertionError("multiple public constructors found");
             }
-            Constructor<?> ctor = mainClass.getConstructor(paramClasses);
-            score.setInstance(ctor.newInstance(params));
-        } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+            score.setInstance(ctor[0].newInstance(params));
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
             throw e;
         } finally {

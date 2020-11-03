@@ -42,7 +42,7 @@ class IRC2BasicTest extends TestBase {
     @BeforeAll
     public static void setup() throws Exception {
         tokenScore = sm.deploy(owner, IRC2BasicToken.class,
-                name, symbol, BigInteger.valueOf(decimals), initialSupply);
+                name, symbol, decimals, initialSupply);
         owner.addBalance(symbol, totalSupply);
     }
 
