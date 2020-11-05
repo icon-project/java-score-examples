@@ -32,6 +32,7 @@ public class ServiceManager {
     private final Stack<Frame> contexts = new Stack<>();
     private final Map<Class<?>, Score> classScoreMap = new HashMap<>();
     private final Map<Address, Score> addressScoreMap = new HashMap<>();
+    private final Map<String, byte[]> storageMap = new HashMap<>();
     private int nextCount = 1;
 
     public Score deploy(Account owner, Class<?> mainClass, Object... params) throws Exception {
@@ -129,6 +130,14 @@ public class ServiceManager {
         if (targetAddress.isContract()) {
             call(from, value, targetAddress, "fallback");
         }
+    }
+
+    public void putStorage(String key, byte[] value) {
+        storageMap.put(getAddress().toString() + key, value);
+    }
+
+    public byte[] getStorage(String key) {
+        return storageMap.get(getAddress().toString() + key);
     }
 
     public static class Block {

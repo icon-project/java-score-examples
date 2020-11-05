@@ -19,12 +19,9 @@ package score;
 import com.iconloop.testsvc.Account;
 import com.iconloop.testsvc.ServiceManager;
 import com.iconloop.testsvc.TestBase;
+import score.impl.AnyDBImpl;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Context extends TestBase {
     private static final ServiceManager sm = getServiceManager();
@@ -142,155 +139,23 @@ public class Context extends TestBase {
     public static void logEvent(Object[] indexed, Object[] data) {
     }
 
+    @SuppressWarnings("unchecked")
     public static<K, V> BranchDB<K, V> newBranchDB(String id, Class<?> leafValueClass) {
-        return new StubDictDB<>(id, leafValueClass);
+        return new AnyDBImpl(id, leafValueClass);
     }
 
+    @SuppressWarnings("unchecked")
     public static<K, V> DictDB<K, V> newDictDB(String id, Class<V> valueClass) {
-        return new StubDictDB<>(id, valueClass);
+        return new AnyDBImpl(id, valueClass);
     }
 
+    @SuppressWarnings("unchecked")
     public static<E> ArrayDB<E> newArrayDB(String id, Class<E> valueClass) {
-        return new StubArrayDB<>(id, valueClass);
+        return new AnyDBImpl(id, valueClass);
     }
 
+    @SuppressWarnings("unchecked")
     public static<E> VarDB<E> newVarDB(String id, Class<E> valueClass) {
-        return new StubVarDB<>(id, valueClass);
-    }
-
-    private static class StubDictDB<K, V> implements DictDB<K, V>, BranchDB<K, V> {
-        private final Map<K, V> map = new HashMap<>();
-        private final Map<String, Object> subMap = new HashMap<>();
-        private final String id;
-        private final Class<?> leafClass;
-
-        public StubDictDB(String id, Class<?> valueClass) {
-            this.id = id;
-            this.leafClass = valueClass;
-        }
-
-        @Override
-        public void set(K k, V v) {
-            if (sm.getCurrentFrame().isReadonly()) {
-                throw new IllegalStateException("read-only context");
-            }
-            map.put(k, v);
-        }
-
-        @Override
-        public V get(K k) {
-            return map.get(k);
-        }
-
-        @Override
-        public V getOrDefault(K k, V v) {
-            return map.getOrDefault(k, v);
-        }
-
-        @Override
-        public Object at(K key) {
-            String subId = getSubId(key);
-            Object o = subMap.get(subId);
-            if (o == null) {
-                o = new StubDictDB<>(subId, leafClass);
-                subMap.put(subId, o);
-            }
-            return o;
-        }
-
-        private String getSubId(K key) {
-            return id + encode(key);
-        }
-
-        private String encode(Object v) {
-            if (v instanceof String) {
-                return (String) v;
-            } else if (v instanceof Address) {
-                return v.toString();
-            } else if (v instanceof BigInteger) {
-                return ((BigInteger) v).toString(16);
-            } else if (v instanceof Integer) {
-                return BigInteger.valueOf((Integer) v).toString(16);
-            } else if (v instanceof Long) {
-                return BigInteger.valueOf((Long) v).toString(16);
-            } else {
-                throw new IllegalArgumentException("Unsupported key type: " + v.getClass());
-            }
-        }
-    }
-
-    private static class StubArrayDB<E> implements ArrayDB<E> {
-        private final List<E> array = new ArrayList<>();
-
-        public StubArrayDB(String id, Class<E> valueClass) {
-        }
-
-        @Override
-        public void add(E value) {
-            if (sm.getCurrentFrame().isReadonly()) {
-                throw new IllegalStateException("read-only context");
-            }
-            array.add(value);
-        }
-
-        @Override
-        public void set(int index, E value) {
-            if (sm.getCurrentFrame().isReadonly()) {
-                throw new IllegalStateException("read-only context");
-            }
-            array.set(index, value);
-        }
-
-        @Override
-        public void removeLast() {
-            pop();
-        }
-
-        @Override
-        public E get(int index) {
-            return array.get(index);
-        }
-
-        @Override
-        public int size() {
-            return array.size();
-        }
-
-        @Override
-        public E pop() {
-            if (sm.getCurrentFrame().isReadonly()) {
-                throw new IllegalStateException("read-only context");
-            }
-            int size = array.size();
-            if (size <= 0) {
-                throw new IllegalStateException();
-            }
-            return array.remove(size - 1);
-        }
-    }
-
-    private static class StubVarDB<E> implements VarDB<E> {
-        private E value;
-
-        public StubVarDB(String id, Class<E> valueClass) {
-        }
-
-        @Override
-        public void set(E value) {
-            if (sm.getCurrentFrame().isReadonly()) {
-                throw new IllegalStateException("read-only context");
-            }
-            this.value = value;
-        }
-
-        @Override
-        public E get() {
-            return value;
-        }
-
-        @Override
-        public E getOrDefault(E defaultValue) {
-            return (value != null ? value : defaultValue);
-        }
+        return new AnyDBImpl(id, valueClass);
     }
 }
