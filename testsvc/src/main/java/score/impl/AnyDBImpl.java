@@ -48,73 +48,27 @@ public class AnyDBImpl extends TestBase implements AnyDB {
             return "";
         } else if (v instanceof String) {
             return (String) v;
-        }
-        return new String(encodeValue(v));
-    }
-
-    private byte[] encodeValue(Object v) {
-        if (v == null) {
-            return null;
         } else if (v instanceof byte[]) {
-            return (byte[]) v;
-        } else if (v instanceof Boolean) {
-            return BigInteger.valueOf((Boolean) v ? 1 : 0).toByteArray();
-        } else if (v instanceof Byte) {
-            return BigInteger.valueOf((Byte) v).toByteArray();
-        } else if (v instanceof Short) {
-            return BigInteger.valueOf((Short) v).toByteArray();
-        } else if (v instanceof Character) {
-            return BigInteger.valueOf((Character) v).toByteArray();
+            return new String((byte[]) v, StandardCharsets.UTF_8);
         } else if (v instanceof Integer) {
-            return BigInteger.valueOf((Integer) v).toByteArray();
-        } else if (v instanceof Long) {
-            return BigInteger.valueOf((Long) v).toByteArray();
+            return BigInteger.valueOf((Integer) v).toString(16);
         } else if (v instanceof BigInteger) {
-            return ((BigInteger) v).toByteArray();
+            return ((BigInteger) v).toString(16);
         } else if (v instanceof Address) {
-            return ((Address) v).toByteArray();
-        } else if (v instanceof String) {
-            return ((String) v).getBytes(StandardCharsets.UTF_8);
-        } else {
-            throw new IllegalArgumentException("Unsupported type: " + v.getClass());
+            return v.toString();
         }
-    }
-
-    private Object decodeValue(byte[] raw, Class<?> cls) {
-        if (raw == null) {
-            return null;
-        } else if (cls == byte[].class) {
-            return new BigInteger(raw).toByteArray();
-        } else if (cls == Boolean.class) {
-            return new BigInteger(raw).intValue() != 0;
-        } else if (cls == Byte.class) {
-            return new BigInteger(raw).byteValue();
-        } else if (cls == Short.class) {
-            return new BigInteger(raw).shortValue();
-        } else if (cls == Integer.class || cls == Character.class) {
-            return new BigInteger(raw).intValue();
-        } else if (cls == Long.class) {
-            return new BigInteger(raw).longValue();
-        } else if (cls == BigInteger.class) {
-            return new BigInteger(raw);
-        } else if (cls == Address.class) {
-            return new Address(raw);
-        } else if (cls == String.class) {
-            return new String(raw, StandardCharsets.UTF_8);
-        } else {
-            throw new IllegalArgumentException("Unsupported type: " + cls);
-        }
+        throw new IllegalArgumentException("Unsupported type: " + v.getClass());
     }
 
     private String getStorageKey(Object k, Type type) {
         return type.name() + getSubId(k);
     }
 
-    private void setValue(String key, byte[] value) {
+    private void setValue(String key, Object value) {
         sm.putStorage(key, value);
     }
 
-    private byte[] getValue(String key) {
+    private Object getValue(String key) {
         return sm.getStorage(key);
     }
 
@@ -124,17 +78,17 @@ public class AnyDBImpl extends TestBase implements AnyDB {
         if (sm.getCurrentFrame().isReadonly()) {
             throw new IllegalStateException("read-only context");
         }
-        setValue(getStorageKey(key, Type.DictDB), encodeValue(value));
+        setValue(getStorageKey(key, Type.DictDB), value);
     }
 
     @Override
     public Object get(Object key) {
-        return decodeValue(getValue(getStorageKey(key, Type.DictDB)), leafValue);
+        return getValue(getStorageKey(key, Type.DictDB));
     }
 
     @Override
     public Object getOrDefault(Object key, Object defaultValue) {
-        var v = decodeValue(getValue(getStorageKey(key, Type.DictDB)), leafValue);
+        var v = getValue(getStorageKey(key, Type.DictDB));
         return (v != null) ? v : defaultValue;
     }
 
@@ -151,8 +105,8 @@ public class AnyDBImpl extends TestBase implements AnyDB {
             throw new IllegalStateException("read-only context");
         }
         int size = size();
-        setValue(getStorageKey(size, Type.ArrayDB), encodeValue(value));
-        setValue(getStorageKey(null, Type.ArrayDB), encodeValue(size + 1));
+        setValue(getStorageKey(size, Type.ArrayDB), value);
+        setValue(getStorageKey(null, Type.ArrayDB), size + 1);
     }
 
     @Override
@@ -164,7 +118,7 @@ public class AnyDBImpl extends TestBase implements AnyDB {
         if (index >= size || index < 0) {
             throw new IllegalArgumentException();
         }
-        setValue(getStorageKey(index, Type.ArrayDB), encodeValue(value));
+        setValue(getStorageKey(index, Type.ArrayDB), value);
     }
 
     @Override
@@ -178,14 +132,14 @@ public class AnyDBImpl extends TestBase implements AnyDB {
         if (index >= size || index < 0) {
             throw new IllegalArgumentException();
         }
-        return decodeValue(getValue(getStorageKey(index, Type.ArrayDB)), leafValue);
+        return getValue(getStorageKey(index, Type.ArrayDB));
     }
 
     @Override
     public int size() {
         var v = getValue(getStorageKey(null, Type.ArrayDB));
         if (v == null) return 0;
-        return new BigInteger(v).intValue();
+        return (int) v;
     }
 
     @Override
@@ -197,9 +151,9 @@ public class AnyDBImpl extends TestBase implements AnyDB {
         if (size <= 0) {
             throw new IllegalArgumentException();
         }
-        var v = decodeValue(getValue(getStorageKey(size - 1, Type.ArrayDB)), leafValue);
+        var v = getValue(getStorageKey(size - 1, Type.ArrayDB));
         setValue(getStorageKey(size - 1, Type.ArrayDB), null);
-        setValue(getStorageKey(null, Type.ArrayDB), encodeValue(size - 1));
+        setValue(getStorageKey(null, Type.ArrayDB), size - 1);
         return v;
     }
 
@@ -209,17 +163,17 @@ public class AnyDBImpl extends TestBase implements AnyDB {
         if (sm.getCurrentFrame().isReadonly()) {
             throw new IllegalStateException("read-only context");
         }
-        setValue(getStorageKey(null, Type.VarDB), encodeValue(value));
+        setValue(getStorageKey(null, Type.VarDB), value);
     }
 
     @Override
     public Object get() {
-        return decodeValue(getValue(getStorageKey(null, Type.VarDB)), leafValue);
+        return getValue(getStorageKey(null, Type.VarDB));
     }
 
     @Override
     public Object getOrDefault(Object defaultValue) {
-        var v = decodeValue(getValue(getStorageKey(null, Type.VarDB)), leafValue);
+        var v = getValue(getStorageKey(null, Type.VarDB));
         return (v != null) ? v : defaultValue;
     }
 }
