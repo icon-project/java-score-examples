@@ -114,7 +114,12 @@ public class TransactionHandler {
     }
 
     public BigInteger estimateStep(Transaction transaction) throws IOException {
-        return iconService.estimateStep(transaction).execute();
+        try {
+            return iconService.estimateStep(transaction).execute();
+        } catch (RpcError e) {
+            LOG.info("estimateStep failed(" + e.getCode() + ", " + e.getMessage() + "); use default steps.");
+            return Constants.DEFAULT_STEPS.multiply(BigInteger.TWO);
+        }
     }
 
     public RpcItem call(Call<RpcItem> call) throws IOException {

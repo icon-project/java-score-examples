@@ -2,6 +2,7 @@ rootProject.name = 'java-score-examples'
 include (
     'hello-world',
     'irc2-token',
+    'irc3-token',
     'multisig-wallet',
     'sample-crowdsale',
     'sample-token',
