@@ -142,9 +142,20 @@ public class IRC3TokenTest extends TestBase {
         showTokenStatus(tokenScore);
         LOG.infoExiting();
 
-        // 6. negative tests
+        // 6. burn and check
+        LOG.infoEntering("burn and check");
+        var balance = tokenScore.balanceOf(ownerWallet.getAddress());
+        token = tokenScore.tokenOfOwnerByIndex(ownerWallet.getAddress(), 0);
+        ids[0] = tokenScore.burn(ownerWallet, token);
+        assertSuccess(txHandler.getResult(ids[0]));
+        assertEquals(balance.subtract(BigInteger.ONE), tokenScore.balanceOf(ownerWallet.getAddress()));
+        assertEquals(BigInteger.valueOf(tokenId.length-1), tokenScore.totalSupply());
+        showTokenStatus(tokenScore);
+        LOG.infoExiting();
+
+        // 7. negative tests
         LOG.infoEntering("negative tests");
-        final var nonExistToken = new BigInteger(getRandomBytes(10));
+        final var nonExistToken = token; // burned token
         assertThrows(RpcError.class, () -> tokenScore.ownerOf(nonExistToken));
         assertFailure(txHandler.getResult(
                 tokenScore.transferFrom(caller, ownerWallet.getAddress(), caller.getAddress(), tokenId[2])));
