@@ -27,14 +27,6 @@ public class IRC2BasicToken extends IRC2Basic {
 
         // mint the initial token supply here
         Context.require(_initialSupply.compareTo(BigInteger.ZERO) >= 0);
-        _mint(Context.getCaller(), _initialSupply.multiply(pow10(_decimals)));
-    }
-
-    private static BigInteger pow10(int exponent) {
-        BigInteger result = BigInteger.ONE;
-        for (int i = 0; i < exponent; i++) {
-            result = result.multiply(BigInteger.TEN);
-        }
-        return result;
+        _mint(Context.getCaller(), _initialSupply.multiply(BigInteger.TEN.pow(_decimals)));
     }
 }
