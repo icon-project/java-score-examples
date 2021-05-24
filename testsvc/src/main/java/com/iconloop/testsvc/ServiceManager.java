@@ -87,6 +87,14 @@ public class ServiceManager {
     private Score getScoreFromClass(Class<?> caller) {
         var score = classScoreMap.get(caller);
         if (score == null) {
+            for (Class<?> clazz: classScoreMap.keySet()) {
+                var superclass = clazz.getSuperclass();
+                while (!"java.lang.Object".equals(superclass.getName())) {
+                    if (superclass.equals(caller)) {
+                        return classScoreMap.get(clazz);
+                    }
+                }
+            }
             throw new IllegalStateException(caller.getName() + " not found");
         }
         return score;

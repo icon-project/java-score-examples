@@ -58,8 +58,8 @@ class SampleCrowdsaleTest extends TestBase {
     @BeforeEach
     public void setup() throws Exception {
         // deploy token and crowdsale scores
-        tokenScore = sm.deploy(owner, SampleToken.class,
-                name, symbol, BigInteger.valueOf(decimals), initialSupply);
+        tokenScore = sm.deploy(owner, IRC2BasicToken.class,
+                name, symbol, decimals, initialSupply);
         crowdsaleScore = sm.deploy(owner, SampleCrowdsale.class,
                 fundingGoalInICX, tokenScore.getAddress(), durationInBlocks);
 
