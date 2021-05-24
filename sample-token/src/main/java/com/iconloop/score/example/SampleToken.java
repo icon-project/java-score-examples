@@ -19,6 +19,7 @@ package com.iconloop.score.example;
 import score.Address;
 import score.Context;
 import score.DictDB;
+import score.VarDB;
 import score.annotation.EventLog;
 import score.annotation.External;
 import score.annotation.Optional;
@@ -30,8 +31,8 @@ public class SampleToken
     private final String name;
     private final String symbol;
     private final int decimals;
-    private final BigInteger totalSupply;
-    private final DictDB<Address, BigInteger> balances;
+    private final VarDB<BigInteger> totalSupply = Context.newVarDB("totalSupply", BigInteger.class);
+    private final DictDB<Address, BigInteger> balances = Context.newDictDB("balances", BigInteger.class);
 
     public SampleToken(String _name, String _symbol, BigInteger _decimals, BigInteger _initialSupply) {
         this.name = _name;
@@ -46,16 +47,17 @@ public class SampleToken
         Context.require(_initialSupply.compareTo(BigInteger.ZERO) >= 0);
 
         // calculate totalSupply
+        BigInteger _totalSupply;
         if (_initialSupply.compareTo(BigInteger.ZERO) > 0) {
             BigInteger oneToken = pow(BigInteger.TEN, this.decimals);
-            this.totalSupply = oneToken.multiply(_initialSupply);
+            _totalSupply = oneToken.multiply(_initialSupply);
         } else {
-            this.totalSupply = BigInteger.ZERO;
+            _totalSupply = BigInteger.ZERO;
         }
 
-        // set the initial balance of the owner
-        this.balances = Context.newDictDB("balances", BigInteger.class);
-        this.balances.set(Context.getOrigin(), this.totalSupply);
+        // set the total supply and initial balance of the owner
+        this.totalSupply.set(_totalSupply);
+        this.balances.set(Context.getCaller(), _totalSupply);
     }
 
     // BigInteger#pow() is not implemented in the shadow BigInteger.
@@ -85,7 +87,7 @@ public class SampleToken
 
     @External(readonly=true)
     public BigInteger totalSupply() {
-        return totalSupply;
+        return totalSupply.getOrDefault(BigInteger.ZERO);
     }
 
     @External(readonly=true)
@@ -124,5 +126,5 @@ public class SampleToken
     }
 
     @EventLog(indexed=3)
-    private void Transfer(Address _from, Address _to, BigInteger _value, byte[] _data) {}
+    public void Transfer(Address _from, Address _to, BigInteger _value, byte[] _data) {}
 }
