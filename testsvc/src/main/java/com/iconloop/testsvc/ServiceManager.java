@@ -162,7 +162,7 @@ public class ServiceManager {
         public static Block getInstance() {
             if (sInstance == null) {
                 Random rand = new Random();
-                sInstance = new Block(rand.nextInt(1000), System.nanoTime() * 1000);
+                sInstance = new Block(rand.nextInt(1000), System.nanoTime() / 1000);
             }
             return sInstance;
         }
@@ -181,7 +181,7 @@ public class ServiceManager {
 
         public void increase(long delta) {
             height += delta;
-            timestamp = System.nanoTime() * 1000;
+            timestamp = System.nanoTime() / 1000;
         }
     }
 
