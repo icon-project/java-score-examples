@@ -93,6 +93,7 @@ public class ServiceManager {
                     if (superclass.equals(caller)) {
                         return classScoreMap.get(clazz);
                     }
+                    superclass = superclass.getSuperclass();
                 }
             }
             throw new IllegalStateException(caller.getName() + " not found");
