@@ -197,7 +197,7 @@ if (_to.isContract()) {
 * [SCORE API document](https://www.javadoc.io/doc/foundation.icon/javaee-api)
 * [Gradle plugin for JavaEE](https://github.com/icon-project/gradle-javaee-plugin)
 * [A Java SCORE Library for Standard Tokens](https://github.com/sink772/javaee-tokens)
-* [scorex package for Java SCORE](https://github.com/sink772/javaee-scorex)
+* [scorex package for Java SCORE](https://github.com/icon-project/javaee-scorex)
 * [A fast and small JSON parser and writer for Java](https://github.com/sink772/minimal-json)
 * [`goloop` CLI command reference](https://github.com/icon-project/goloop/blob/master/doc/goloop_cli.md)
 
