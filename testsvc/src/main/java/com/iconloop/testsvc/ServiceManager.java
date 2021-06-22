@@ -34,6 +34,7 @@ public class ServiceManager {
     private final Map<Address, Score> addressScoreMap = new HashMap<>();
     private final Map<String, Object> storageMap = new HashMap<>();
     private int nextCount = 1;
+    private static long sleeptime = 0;
 
     public Score deploy(Account owner, Class<?> mainClass, Object... params) throws Exception {
         getBlock().increase();
@@ -148,6 +149,12 @@ public class ServiceManager {
     public Object getStorage(String key) {
         return storageMap.get(getAddress().toString() + key);
     }
+        
+    public void sleep(long microseconds) {
+        sleeptime += microseconds;
+        // 1 block every 2 seconds
+        getBlock().increase(microseconds / 1000 / 1000 / 2);
+    }
 
     public static class Block {
         private static Block sInstance;
@@ -173,7 +180,7 @@ public class ServiceManager {
         }
 
         public long getTimestamp() {
-            return timestamp;
+            return sleeptime + timestamp;
         }
 
         public void increase() {
