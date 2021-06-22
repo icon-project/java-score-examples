@@ -17,5 +17,5 @@
 package score;
 
 public interface BranchDB<K, V> {
-    Object at(K key);
+    V at(K key);
 }
