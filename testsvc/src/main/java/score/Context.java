@@ -116,6 +116,12 @@ public class Context extends TestBase {
         }
     }
 
+    public static void require(boolean condition, String message) { 
+        if (!condition) {
+            throw new AssertionError(message);
+        }
+    }
+
     public static void println(String message) {
         System.out.println(message);
     }
