@@ -6,5 +6,4 @@ include (
     'multisig-wallet',
     'sample-crowdsale',
     'sample-token',
-    'testinteg',
-    'testsvc')
+    'testinteg')

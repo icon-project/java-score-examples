@@ -16,10 +16,10 @@
 
 package com.iconloop.score.example;
 
-import com.iconloop.testsvc.Account;
-import com.iconloop.testsvc.Score;
-import com.iconloop.testsvc.ServiceManager;
-import com.iconloop.testsvc.TestBase;
+import com.iconloop.score.test.Account;
+import com.iconloop.score.test.Score;
+import com.iconloop.score.test.ServiceManager;
+import com.iconloop.score.test.TestBase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

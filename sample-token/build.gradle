@@ -2,8 +2,8 @@ version = '0.2.0'
 
 dependencies {
     compileOnly 'foundation.icon:javaee-api:0.9.0'
-    testImplementation project(':testsvc')
 
+    testImplementation 'foundation.icon:javaee-unittest:0.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }

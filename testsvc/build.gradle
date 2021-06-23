@@ -1,7 +1,0 @@
-apply plugin: 'java-library'
-
-optimizedJar.enabled = false
-
-dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.9.0'
-}

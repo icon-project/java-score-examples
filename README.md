@@ -130,8 +130,9 @@ one is for unit testing and the other is for integration testing.
 
 ### Unit testing
 
-`testsvc` subproject can be used for the unit testing,
-and it provides a SCORE execution emulation layer can be integrated with the JUnit 5 and Mockito frameworks.
+~~`testsvc` subproject can be used for the unit testing,
+and it provides a SCORE execution emulation layer can be integrated with the JUnit 5 and Mockito frameworks.~~
+Now [`javaee-unittest`](https://github.com/icon-project/javaee-unittest) artifact is used to perform the unit testing.
 
 Here are the sample unit test cases.
   - [HelloWorld](hello-world/src/test/java/com/iconloop/score/example/AppTest.java)
@@ -198,6 +199,7 @@ if (_to.isContract()) {
 * [Gradle plugin for JavaEE](https://github.com/icon-project/gradle-javaee-plugin)
 * [A Java SCORE Library for Standard Tokens](https://github.com/sink772/javaee-tokens)
 * [scorex package for Java SCORE](https://github.com/icon-project/javaee-scorex)
+* [An Unit Testing Framework for Java SCORE](https://github.com/icon-project/javaee-unittest)
 * [A fast and small JSON parser and writer for Java](https://github.com/sink772/minimal-json)
 * [`goloop` CLI command reference](https://github.com/icon-project/goloop/blob/master/doc/goloop_cli.md)
 
