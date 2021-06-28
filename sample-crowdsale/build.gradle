@@ -29,13 +29,13 @@ optimizedJar {
 
 deployJar {
     endpoints {
-        gangnam {
-            uri = 'https://gicon.net.solidwallet.io/api/v3'
-            nid = 7
+        sejong {
+            uri = 'https://sejong.net.solidwallet.io/api/v3'
+            nid = 0x53
         }
         local {
             uri = 'http://localhost:9082/api/v3'
-            nid = 3
+            nid = 0x3
         }
     }
     keystore = rootProject.hasProperty('keystoreName') ? "$keystoreName" : ''
