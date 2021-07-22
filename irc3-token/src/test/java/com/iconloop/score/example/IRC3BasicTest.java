@@ -73,7 +73,7 @@ public class IRC3BasicTest extends TestBase {
 
     @Test
     void balanceOf() {
-        var tokenId = mintToken();
+        mintToken();
         assertEquals(1, tokenScore.call("balanceOf", owner.getAddress()));
     }
 
