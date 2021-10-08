@@ -147,7 +147,7 @@ Here are the sample unit test cases.
 `testinteg` subproject can be used for the integration testing.
 It assumes there is a running ICON network (either local or remote) that can be connected for the testing.
 It uses the ICON Java SDK (`foundation.icon:icon-sdk:2.0.0`) to interact with the network.
-The [default configuration](testinteg/conf/env.props) is for localhost network.
+The [default configuration](testinteg/conf/env.props) is for [gochain-local](https://github.com/icon-project/gochain-local) network.
 If you want to change this configuration, either modify the configuration file directly
 or set the proper system property (`env.props`) when you run the integration testing
 (see [example](https://github.com/icon-project/java-score-examples/blob/14c4df50b146c12c27a040410411271e87efa94a/multisig-wallet/build.gradle#L69)).
@@ -156,6 +156,12 @@ Here are the sample integration test cases.
   - [MultisigWallet](multisig-wallet/src/intTest/java/foundation/icon/test/cases/MultiSigWalletTest.java)
   - [Crowdsale](sample-crowdsale/src/intTest/java/foundation/icon/test/cases/CrowdsaleTest.java)
   - [IRC3Token (NFT)](irc3-token/src/intTest/java/foundation/icon/test/cases/IRC3TokenTest.java)
+
+Use `integrationTest` task to run the integration testing.
+Here is the example of invoking the MultisigWallet integration testing.
+```
+$ ./gradlew multisig-wallet:integrationTest
+```
 
 ## Java SCORE Structure
 
