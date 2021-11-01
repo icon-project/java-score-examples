@@ -4,5 +4,5 @@ optimizedJar.enabled = false
 
 dependencies {
     implementation 'foundation.icon:icon-sdk:2.0.0'
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 }
