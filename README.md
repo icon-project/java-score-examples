@@ -92,13 +92,13 @@ Succeeded to deploy: 0x699534c9f5277539e1b572420819141c7cf3e52a6904a34b2a2cdb05b
 SCORE address: cxd6d044b01db068cded47bde12ed4f15a6da9f1d8
 ```
 
-**[Note]** If you want to deploy to Sejong testnet, use the following configuration for the endpoint and run `deployToSejong` task.
+**[Note]** If you want to deploy to Lisbon testnet, use the following configuration for the endpoint and run `deployToLisbon` task.
 ```groovy
 deployJar {
     endpoints {
-        sejong {
-            uri = 'https://sejong.net.solidwallet.io/api/v3'
-            nid = 0x53
+        lisbon {
+            uri = 'https://lisbon.net.solidwallet.io/api/v3'
+            nid = 0x2
         }
         ...
     }

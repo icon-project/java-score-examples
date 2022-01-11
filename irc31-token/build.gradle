@@ -18,9 +18,9 @@ optimizedJar {
 
 deployJar {
     endpoints {
-        sejong {
-            uri = 'https://sejong.net.solidwallet.io/api/v3'
-            nid = 0x53
+        lisbon {
+            uri = 'https://lisbon.net.solidwallet.io/api/v3'
+            nid = 0x2
         }
         local {
             uri = 'http://localhost:9082/api/v3'
