@@ -21,9 +21,14 @@ import score.annotation.External;
 import score.annotation.Payable;
 
 public class HelloWorld {
-    private final String name;
+    private String name;
 
     public HelloWorld(String name) {
+        this.name = name;
+    }
+
+    @External()
+    public void setName(String name) {
         this.name = name;
     }
 
