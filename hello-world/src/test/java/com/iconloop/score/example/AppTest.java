@@ -34,4 +34,15 @@ class AppTest {
         HelloWorld classUnderTest = new HelloWorld("Alice");
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
     }
+
+    @Test
+    void setName() {
+        final String alice = "Alice";
+        HelloWorld classUnderTest = new HelloWorld(alice);
+        assertEquals(classUnderTest.name(), alice);
+
+        final String bob = "Bob";
+        classUnderTest.setName(bob);
+        assertEquals(classUnderTest.name(), bob);
+    }
 }
