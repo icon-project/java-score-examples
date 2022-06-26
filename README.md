@@ -13,7 +13,7 @@ $ brew tap AdoptOpenJDK/openjdk
 $ brew cask install adoptopenjdk11
 ```
 
-In Linux (Ubuntu 18.04):
+In Linux (Ubuntu 20.04):
 ```
 $ sudo apt install openjdk-11-jdk
 ```
@@ -165,6 +165,7 @@ $ ./gradlew multisig-wallet:integrationTest
 
 ## Java SCORE Structure
 
+
 ### Comparison to Python SCORE
 
 | Name               | Python SCORE                 | Java SCORE                  |
@@ -201,6 +202,7 @@ if (_to.isContract()) {
 
 ## References
 
+* [Java SCORE Overview](https://docs.google.com/presentation/d/1S24vCTcPJ5GOGfPu1sApJLwyOTTdgYEf/export/pdf)
 * [SCORE API document](https://www.javadoc.io/doc/foundation.icon/javaee-api)
 * [Gradle plugin for JavaEE](https://github.com/icon-project/gradle-javaee-plugin)
 * [A Java SCORE Library for Standard Tokens](https://github.com/sink772/javaee-tokens)
