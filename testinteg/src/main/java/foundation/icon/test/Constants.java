@@ -27,7 +27,7 @@ public class Constants {
     public static final BigInteger DEFAULT_STEPS = BigInteger.valueOf(100000);
     public static final long DEFAULT_WAITING_TIME = 7000;
 
-    public static final Address ZERO_ADDRESS =
+    public static final Address SYSTEM_ADDRESS =
             new Address("cx0000000000000000000000000000000000000000");
     public static final Address TREASURY_ADDRESS =
             new Address("hx1000000000000000000000000000000000000000");

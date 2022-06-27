@@ -91,6 +91,10 @@ public class Score {
         return invoke(wallet, method, params, value, steps, null, null);
     }
 
+    public Bytes invoke(Wallet wallet, Transaction tx) throws IOException {
+        return this.txHandler.invoke(wallet, tx, null);
+    }
+
     public Bytes invoke(Wallet wallet, String method, RpcObject params, BigInteger value,
                         BigInteger steps, BigInteger timestamp, BigInteger nonce) throws IOException {
         Transaction tx = getTransaction(wallet, method, params, value, timestamp, nonce);
@@ -147,6 +151,10 @@ public class Score {
 
     public TransactionResult getResult(Bytes txHash, long waiting) throws ResultTimeoutException, IOException {
         return this.txHandler.getResult(txHash, waiting);
+    }
+
+    protected TransactionHandler getTxHandler() {
+        return this.txHandler;
     }
 
     public Address getAddress() {

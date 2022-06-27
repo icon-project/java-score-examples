@@ -58,7 +58,7 @@ public class TransactionHandler {
 
     public Score deploy(Wallet owner, String scorePath, RpcObject params, BigInteger steps)
             throws IOException, ResultTimeoutException, TransactionFailureException {
-        return deploy(owner, scorePath, Constants.ZERO_ADDRESS, params, steps);
+        return deploy(owner, scorePath, Constants.SYSTEM_ADDRESS, params, steps);
     }
 
     public Score deploy(Wallet owner, String scorePath, Address to, RpcObject params, BigInteger steps)
@@ -72,8 +72,8 @@ public class TransactionHandler {
         }
     }
 
-    private Bytes doDeploy(Wallet owner, byte[] content, Address to, RpcObject params,
-                           BigInteger steps, String contentType) throws IOException {
+    public Bytes doDeploy(Wallet owner, byte[] content, Address to, RpcObject params,
+                          BigInteger steps, String contentType) throws IOException {
         Transaction transaction = TransactionBuilder.newBuilder()
                 .nid(getNetworkId())
                 .from(owner.getAddress())
@@ -97,6 +97,15 @@ public class TransactionHandler {
         return new Score(this, new Address(result.getScoreAddress()));
     }
 
+    public Bytes deployOnly(Wallet owner, String scorePath, RpcObject params) throws IOException {
+        return deployOnly(owner, Constants.SYSTEM_ADDRESS, scorePath, params);
+    }
+
+    public Bytes deployOnly(Wallet owner, Address to, String scorePath, RpcObject params) throws IOException {
+        byte[] data = ZipFile.zipContent(scorePath);
+        return doDeploy(owner, data, to, params, null, Constants.CONTENT_TYPE_PYTHON);
+    }
+
     public Env.Chain getChain() {
         return this.chain;
     }
@@ -118,7 +127,7 @@ public class TransactionHandler {
             return iconService.estimateStep(transaction).execute();
         } catch (RpcError e) {
             LOG.info("estimateStep failed(" + e.getCode() + ", " + e.getMessage() + "); use default steps.");
-            return Constants.DEFAULT_STEPS.multiply(BigInteger.TWO);
+            return Constants.DEFAULT_STEPS.multiply(BigInteger.TEN);
         }
     }
 
@@ -160,7 +169,7 @@ public class TransactionHandler {
                     }
                     continue;
                 }
-                LOG.warning("RpcError: code(" + e.getCode() + ") message(" + e.getMessage() + "); Retry in 1 sec.");
+                LOG.warning("RpcError: code(" + e.getCode() + ") message(" + e.getMessage() + ")");
                 throw e;
             }
         }
