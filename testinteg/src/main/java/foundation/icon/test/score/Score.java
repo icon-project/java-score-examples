@@ -27,6 +27,7 @@ import foundation.icon.icx.data.TransactionResult.EventLog;
 import foundation.icon.icx.transport.jsonrpc.RpcItem;
 import foundation.icon.icx.transport.jsonrpc.RpcObject;
 import foundation.icon.test.Constants;
+import foundation.icon.test.Env;
 import foundation.icon.test.ResultTimeoutException;
 import foundation.icon.test.TransactionHandler;
 
@@ -51,6 +52,10 @@ public class Score {
         String key = "score.path." + pkgName;
         String path = System.getProperty(key);
         if (path == null) {
+            String scoreRoot = Env.getScoreRoot();
+            if (scoreRoot != null) {
+                return scoreRoot + pkgName;
+            }
             throw new IllegalArgumentException("No such property: " + key);
         }
         return path;

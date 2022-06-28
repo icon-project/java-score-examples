@@ -29,6 +29,7 @@ import java.util.Properties;
 public class Env {
     public static final Log LOG = Log.getGlobal();
     private static Chain chain;
+    private static String scoreRoot;
 
     static {
         String envFile = System.getProperty("env.props", "conf/env.props");
@@ -66,6 +67,12 @@ public class Env {
             throw new IllegalArgumentException("node url not found");
         }
         chain = new Chain(Integer.parseInt(nid.substring(2), 16), godWallet, url);
+
+        // try to read the default score root path
+        scoreRoot = props.getProperty("score.root");
+        if (scoreRoot != null && !scoreRoot.endsWith("/")) {
+            scoreRoot = scoreRoot + "/";
+        }
     }
 
     private static KeyWallet readWalletFromFile(String path, String password) throws IOException {
@@ -76,6 +83,10 @@ public class Env {
             e.printStackTrace();
             throw new IOException("Key load failed!");
         }
+    }
+
+    public static String getScoreRoot() {
+        return scoreRoot;
     }
 
     public static Chain getDefaultChain() {
