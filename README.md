@@ -144,7 +144,7 @@ Here are the sample unit test cases.
 
 ### Integration testing
 
-`testinteg` subproject can be used for the integration testing.
+[`testinteg`](testinteg) subproject can be used for the integration testing.
 It assumes there is a running ICON network (either local or remote) that can be connected for the testing.
 It uses the [ICON SDK for Java](https://github.com/icon-project/icon-sdk-java) to interact with the network.
 The [default configuration](testinteg/conf/env.props) is for [gochain-local](https://github.com/icon-project/gochain-local) network.
