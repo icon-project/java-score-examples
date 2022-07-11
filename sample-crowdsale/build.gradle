@@ -10,7 +10,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.9.1'
+    compileOnly 'foundation.icon:javaee-api:0.9.2'
 
     testImplementation project(':irc2-token')
     testImplementation 'foundation.icon:javaee-unittest:0.9.4'
