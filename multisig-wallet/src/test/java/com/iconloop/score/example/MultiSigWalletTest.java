@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import score.Address;
+import score.UserRevertedException;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -189,7 +190,7 @@ class MultiSigWalletTest extends TestBase {
         Account alice = sm.createAccount();
         BigInteger txId = submitAddWalletOwner(owners[0], alice);
         // confirm by alice herself
-        assertThrows(AssertionError.class, () ->
+        assertThrows(UserRevertedException.class, () ->
                 multisigScore.invoke(alice, "confirmTransaction", txId));
     }
 

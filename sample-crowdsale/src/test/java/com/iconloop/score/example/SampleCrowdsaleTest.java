@@ -22,6 +22,7 @@ import com.iconloop.score.test.ServiceManager;
 import com.iconloop.score.test.TestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import score.UserRevertedException;
 
 import java.math.BigInteger;
 
@@ -87,7 +88,7 @@ class SampleCrowdsaleTest extends TestBase {
         Account alice = sm.createAccount(100);
         BigInteger fund = ICX.multiply(BigInteger.valueOf(40));
         // crowdsale is not yet started
-        assertThrows(AssertionError.class, () ->
+        assertThrows(UserRevertedException.class, () ->
                 sm.transfer(alice, crowdsaleScore.getAddress(), fund));
     }
 
