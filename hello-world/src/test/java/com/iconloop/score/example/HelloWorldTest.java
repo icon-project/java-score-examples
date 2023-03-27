@@ -16,12 +16,18 @@
 
 package com.iconloop.score.example;
 
+import com.iconloop.score.test.Account;
+import com.iconloop.score.test.ServiceManager;
+import com.iconloop.score.test.TestBase;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class AppTest {
+class HelloWorldTest extends TestBase {
+    private static final ServiceManager sm = getServiceManager();
+    private static final Account owner = sm.createAccount();
+
     @Test
     void appHasAName() {
         final String name = "Alice";
@@ -36,13 +42,13 @@ class AppTest {
     }
 
     @Test
-    void setName() {
+    void setName() throws Exception {
         final String alice = "Alice";
-        HelloWorld classUnderTest = new HelloWorld(alice);
-        assertEquals(classUnderTest.name(), alice);
+        var score = sm.deploy(owner, HelloWorld.class, alice);
+        assertEquals(alice, score.call("name"));
 
         final String bob = "Bob";
-        classUnderTest.setName(bob);
-        assertEquals(classUnderTest.name(), bob);
+        score.invoke(owner, "setName", bob);
+        assertEquals(bob, score.call("name"));
     }
 }
