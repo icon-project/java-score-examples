@@ -4,7 +4,7 @@ dependencies {
     compileOnly 'foundation.icon:javaee-api:0.9.4'
     implementation 'com.github.sink772:javaee-tokens:0.6.2'
 
-    testImplementation 'foundation.icon:javaee-unittest:0.10.0'
+    testImplementation 'foundation.icon:javaee-unittest:0.11.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
