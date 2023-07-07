@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.8.3'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.8.4'
     }
 }
 
