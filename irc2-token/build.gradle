@@ -1,10 +1,10 @@
 version = '0.9.1'
 
 dependencies {
-    compileOnly 'foundation.icon:javaee-api:0.9.5'
+    compileOnly 'foundation.icon:javaee-api:0.9.6'
     implementation 'com.github.sink772:javaee-tokens:0.6.4'
 
-    testImplementation 'foundation.icon:javaee-unittest:0.12.0'
+    testImplementation 'foundation.icon:javaee-unittest:0.12.1'
     testImplementation 'org.mockito:mockito-core:4.11.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'

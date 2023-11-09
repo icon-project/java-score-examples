@@ -7,7 +7,7 @@ plugins {
 optimizedJar.enabled = false
 
 dependencies {
-    implementation 'foundation.icon:icon-sdk:2.1.0'
+    implementation 'foundation.icon:icon-sdk:2.5.1'
     implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 }
 
